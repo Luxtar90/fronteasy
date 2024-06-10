@@ -1,0 +1,54 @@
+/* app/layout.css */
+.header {
+  background: #ffffff;
+  color: #000000;
+  padding: 20px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #000000;
+}
+
+.nav {
+  display: flex;
+  gap: 20px;
+}
+
+.nav button {
+  color: #000000;
+  padding: 10px 15px;
+  border-radius: 5px;
+  transition: background 0.3s, box-shadow 0.3s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.nav button:hover {
+  background: #e0e0e0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.main-container {
+  padding: 100px 20px 20px; /* Ajusta el padding superior para evitar que el contenido se superponga con el header */
+  max-width: 1200px;
+  margin: 0 auto;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

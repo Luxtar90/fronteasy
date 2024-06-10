@@ -1,0 +1,123 @@
+/* app/HomePage.css */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f8f9fa;
+  }
+  
+  .homepage-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  
+  .header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  
+  .nav {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .nav-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background: #e0e0e0;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+  
+  .nav-button.primary {
+    background: #6200ea;
+    color: #fff;
+  }
+  
+  .content {
+    text-align: center;
+    max-width: 800px;
+    margin: 40px 0;
+  }
+  
+  .content h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .content p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+    color: #666;
+  }
+  
+  .features {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 30px;
+  }
+  
+  .features span {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    color: #333;
+  }
+  
+  .cta-button {
+    background: #6200ea;
+    color: #fff;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    margin-bottom: 10px;
+  }
+  
+  .cta-note {
+    font-size: 0.9rem;
+    color: #999;
+  }
+  
+  .footer {
+    text-align: center;
+    padding: 20px 0;
+    background: #fff;
+    width: 100%;
+  }
+  
+  .footer p {
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .logos {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  .logos img {
+    height: 40px;
+  }
+  
