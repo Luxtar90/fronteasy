@@ -4,7 +4,7 @@
 import React from 'react';
 import Layout from './layout';
 import { useRouter } from 'next/navigation';
-import './HomePage.css';
+import './homepage.css'; // Corrected the import statement
 
 const HomePage: React.FC = () => {
   const router = useRouter();
@@ -21,7 +21,10 @@ const HomePage: React.FC = () => {
     <Layout>
       <div className="homepage-container">
         <header className="header">
-          <div className="logo">TaskEase</div>
+          <div className="logo-container">
+            <img src="/logo.png" alt="TaskEase Logo" className="logo" />
+            <span className="logo-text">TaskEase</span>
+          </div>
           <nav className="nav">
             <button className="nav-button">Contactar a ventas</button>
             <button className="nav-button primary" onClick={goToLogin}>Ir a mi cuenta</button>

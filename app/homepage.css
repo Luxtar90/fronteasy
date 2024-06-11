@@ -1,123 +1,153 @@
-/* app/HomePage.css */
+/* homepage.css */
 body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #f8f9fa;
-  }
-  
-  .homepage-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    min-height: 100vh;
-    padding: 20px;
-  }
-  
-  .header {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    background: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .logo {
-    font-size: 1.5rem;
-    font-weight: bold;
-  }
-  
-  .nav {
-    display: flex;
-    gap: 10px;
-  }
-  
-  .nav-button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    background: #e0e0e0;
-    cursor: pointer;
-    font-size: 1rem;
-  }
-  
-  .nav-button.primary {
-    background: #6200ea;
-    color: #fff;
-  }
-  
-  .content {
-    text-align: center;
-    max-width: 800px;
-    margin: 40px 0;
-  }
-  
-  .content h1 {
-    font-size: 2.5rem;
-    margin-bottom: 20px;
-    color: #333;
-  }
-  
-  .content p {
-    font-size: 1.2rem;
-    margin-bottom: 30px;
-    color: #666;
-  }
-  
-  .features {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 15px;
-    margin-bottom: 30px;
-  }
-  
-  .features span {
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 20px;
-    padding: 10px 20px;
-    font-size: 1rem;
-    color: #333;
-  }
-  
-  .cta-button {
-    background: #6200ea;
-    color: #fff;
-    padding: 15px 30px;
-    border: none;
-    border-radius: 5px;
-    font-size: 1.2rem;
-    cursor: pointer;
-    margin-bottom: 10px;
-  }
-  
-  .cta-note {
-    font-size: 0.9rem;
-    color: #999;
-  }
-  
-  .footer {
-    text-align: center;
-    padding: 20px 0;
-    background: #fff;
-    width: 100%;
-  }
-  
-  .footer p {
-    margin-bottom: 20px;
-    color: #333;
-  }
-  
-  .logos {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-  }
-  
-  .logos img {
-    height: 40px;
-  }
-  
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  background: linear-gradient(to bottom, #87cefa, #e0f7fa);
+}
+
+.homepage-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: transparent;
+}
+
+.header {
+  width: 100%;
+  background: #87cefa;
+  color: #2c3e50;
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 50px;
+  align-items: center;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  height: 40px;
+  margin-right: 10px;
+}
+
+.logo-text {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.nav {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-button {
+  background: none;
+  border: none;
+  color: #2c3e50;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.nav-button.primary {
+  background: #2c3e50;
+  color: #ffffff;
+  border-radius: 5px;
+  padding: 10px 20px;
+  transition: background 0.3s, color 0.3s;
+}
+
+.nav-button:hover {
+  color: #000000;
+}
+
+.nav-button.primary:hover {
+  background: #1a242f;
+  color: #000000;
+}
+
+.content {
+  width: 80%;
+  max-width: 1200px;
+  text-align: center;
+  margin: 50px 0;
+}
+
+.content h1 {
+  font-size: 2.5rem;
+  color: #2c3e50;
+  margin-bottom: 20px;
+}
+
+.content p {
+  font-size: 1.2rem;
+  color: #34495e;
+  margin-bottom: 40px;
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.features span {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+}
+
+.cta-button {
+  background: #2c3e50;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  padding: 15px 30px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.cta-button:hover {
+  background: #1a242f;
+}
+
+.cta-note {
+  margin-top: 20px;
+  font-size: 1rem;
+  color: #34495e;
+}
+
+.footer {
+  width: 100%;
+  background: #87cefa;
+  color: #2c3e50;
+  padding: 20px 0;
+  text-align: center;
+}
+
+.footer p {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.footer .logos {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.footer .logos img {
+  width: 50px;
+  height: auto;
+}

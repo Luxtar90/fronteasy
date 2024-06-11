@@ -1,7 +1,8 @@
 'use client';
 import React, { useState } from 'react';
 import axios from '../../src/axiosConfig';
-import { isAxiosError } from '../../src/utils/axiosUtils'; // Ajusta la ruta según tu estructura
+import { isAxiosError } from '../../src/utils/axiosUtils';
+import './resetPassword.css';
 
 const ResetPassword: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -22,19 +23,26 @@ const ResetPassword: React.FC = () => {
   };
 
   return (
-    <div>
-      <h2>Recuperar Contraseña</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <button type="submit">Enviar</button>
-      </form>
-      {message && <p>{message}</p>}
+    <div className="reset-container">
+      <div className="reset-box">
+        <div className="reset-header">
+          <img src="/logo.png" alt="TaskEase Logo" className="logo" />
+          <h2>Recuperar Contraseña</h2>
+          <p>Escribe tu correo registrado y te enviaremos un link de recuperación al mismo</p>
+        </div>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="email"
+            placeholder="Correo Electrónico"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <button type="submit">Enviar</button>
+        </form>
+        {message && <p className="message">{message}</p>}
+        <p className="login-link">¿Aún no tienes cuenta? <a href="/register">Regístrate</a></p>
+      </div>
     </div>
   );
 };

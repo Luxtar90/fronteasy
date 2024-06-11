@@ -1,38 +1,44 @@
-// app/layout.tsx
+// layout.tsx
 'use client';
 
-import './globals.css';
-import './layout.css';
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import Link from 'next/link';
+import './layout.css';
 
-const RootLayout = ({ children }: { children: ReactNode }) => {
-  const handleLinkClick = (href: string) => {
-    window.location.href = href;
-  };
+interface LayoutProps {
+  children: ReactNode;
+}
 
+const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <html lang="en">
       <head>
         <title>TaskEase</title>
+        <meta name="description" content="Task management application" />
+        <link rel="icon" href="/favicon.ico" />
       </head>
       <body>
-        <header className="header">
-          <div className="container">
-            <div className="logo">TaskEase</div>
+        <div className="layout">
+          <header className="header">
+            <div className="logo-container">
+              <img src="/logo.png" alt="TaskEase Logo" className="logo" />
+              <span className="logo-text">TaskEase</span>
+            </div>
             <nav className="nav">
-              <button onClick={() => handleLinkClick('/')}>Home</button>
-              <button onClick={() => handleLinkClick('/login')}>Login</button>
-              <button onClick={() => handleLinkClick('/register')}>Register</button>
-              <button onClick={() => handleLinkClick('/reset-password')}>Reset Password</button>
-              <button onClick={() => handleLinkClick('/tasks')}>Tasks</button>
+              <Link href="/" className="nav-link">Home</Link>
+              <Link href="/login" className="nav-link">Login</Link>
+              <Link href="/register" className="nav-link">Register</Link>
+              <Link href="/reset-password" className="nav-link">Reset Password</Link>
+              <Link href="/tasks" className="nav-link">Tasks</Link>
             </nav>
-          </div>
-        </header>
-        <main className="main-container">{children}</main>
+          </header>
+          <main>
+            {children}
+          </main>
+        </div>
       </body>
     </html>
   );
 };
 
-export default RootLayout;
+export default Layout;

@@ -1,12 +1,15 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import axios from '../../src/axiosConfig'; // Ajusta la ruta según tu estructura
+import axios from '../../src/axiosConfig';
 import TaskItem from './TaskItem';
+import './task.css'; // Asegúrate de ajustar el CSS
 
 interface Task {
   _id: string;
   title: string;
   description: string;
+  start: string;
+  end: string;
 }
 
 const TaskList: React.FC = () => {
@@ -21,11 +24,13 @@ const TaskList: React.FC = () => {
   }, []);
 
   return (
-    <div>
-      <h2>Tasks</h2>
-      {tasks.map((task) => (
-        <TaskItem key={task._id} task={task} />
-      ))}
+    <div className="task-list">
+      <h2>Tareas</h2>
+      <div className="task-list-scroll">
+        {tasks.map((task) => (
+          <TaskItem key={task._id} task={task} />
+        ))}
+      </div>
     </div>
   );
 };
