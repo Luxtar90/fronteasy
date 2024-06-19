@@ -1,60 +1,47 @@
 /* layout.css */
-body {
-  margin: 0;
-  font-family: 'Roboto', sans-serif;
-  background: linear-gradient(to right, #eef2f3, #8e9eab);
-}
 
-.layout {
-  width: 100%;
+.nav-horizontal {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between; /* Cambiado para un mejor control del espacio */
   align-items: center;
+  background-color: #2c3e50;
+  padding: 15px 30px; /* Más padding para un look más espacioso */
+  margin-bottom: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Añade una sombra sutil */
+  border-radius: 8px; /* Bordes redondeados */
 }
 
-.header {
-  width: 100%;
-  background: #4fb0e8;
-  color: #ffffff;
-  display: flex;
-  justify-content: space-between;
-  padding: 20px 50px;
-  align-items: center;
-}
-
-.logo-container {
+.nav-horizontal .logo-container {
   display: flex;
   align-items: center;
 }
 
-.logo {
+.nav-horizontal .logo-container img {
   height: 40px;
   margin-right: 10px;
 }
 
-.logo-text {
-  font-size: 1.5rem;
-  font-weight: bold;
-}
-
-.nav {
+.nav-link-container {
   display: flex;
-  gap: 20px;
+  align-items: center;
+  gap: 20px; /* Espaciado entre enlaces */
 }
 
 .nav-link {
-  color: #ffffff;
+  color: white;
   text-decoration: none;
-  font-size: 1rem;
-  transition: color 0.3s;
+  font-size: 16px;
+  padding: 10px 20px;
+  transition: background-color 0.3s ease, color 0.3s ease; /* Efecto de transición en color */
+  border-radius: 4px; /* Bordes redondeados para enlaces */
 }
 
 .nav-link:hover {
-  color: #cce7ff;
+  background-color: #34495e;
+  color: #ffffff; /* Mantiene el color blanco en hover */
 }
 
-main {
-  width: 100%;
-  max-width: 1200px;
-  margin: 20px auto;
+.nav-link.active {
+  background-color: #1abc9c; /* Color diferente para el enlace activo */
+  color: #ffffff;
 }

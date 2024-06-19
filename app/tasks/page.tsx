@@ -8,10 +8,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTasks, faPlus, faHome, faCalendarAlt, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import axios from '../../src/axiosConfig';
 import { EventInput } from '@fullcalendar/core';
+import { useRouter } from 'next/navigation'; // Importar useRouter para la navegación
 import './task.css';
 
 const TaskPage: React.FC = () => {
   const [tasks, setTasks] = useState<EventInput[]>([]);
+  const router = useRouter(); // Usar useRouter para la navegación
 
   const fetchTasks = async () => {
     try {
@@ -32,17 +34,21 @@ const TaskPage: React.FC = () => {
     fetchTasks();
   }, []);
 
+  const goToMyDay = () => {
+    router.push('/myday'); // Redirigir a la página MyDay
+  };
+
   return (
-    <div className="homepage-container">
+    <div className="taskpage-container">
       <div className="sidebar">
         <div className="logo">
           <FontAwesomeIcon icon={faTasks} /> TaskEase
         </div>
         <nav className="nav">
-          <a href="/" className="nav-item">
+          <a onClick={goToMyDay} className="nav-item">
             <FontAwesomeIcon icon={faHome} /> Mi día
           </a>
-          <a href="/tasks" className="nav-item">
+          <a href="/tasks" className="nav-item active">
             <FontAwesomeIcon icon={faTasks} /> Tareas
           </a>
           <a href="/completed" className="nav-item">

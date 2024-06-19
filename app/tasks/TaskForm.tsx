@@ -1,3 +1,4 @@
+// TaskForm.tsx
 'use client';
 import React, { useState } from 'react';
 import axios from '../../src/axiosConfig';
@@ -14,6 +15,7 @@ const TaskForm: React.FC = () => {
       console.log(response.data);
       setTitle('');
       setDescription('');
+      // Optionally, refresh the task list here
     } catch (error) {
       console.error(error);
     }

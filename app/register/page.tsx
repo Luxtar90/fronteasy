@@ -1,4 +1,6 @@
+// app/register.tsx
 'use client';
+
 import React, { useState } from 'react';
 import axios from '../../src/axiosConfig';
 import './register.css';

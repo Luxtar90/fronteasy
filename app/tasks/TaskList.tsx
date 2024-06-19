@@ -1,3 +1,4 @@
+// TaskList.tsx
 'use client';
 import React, { useEffect, useState } from 'react';
 import axios from '../../src/axiosConfig';
@@ -17,8 +18,12 @@ const TaskList: React.FC = () => {
 
   useEffect(() => {
     const fetchTasks = async () => {
-      const response = await axios.get('/tasks');
-      setTasks(response.data);
+      try {
+        const response = await axios.get('/tasks');
+        setTasks(response.data);
+      } catch (error) {
+        console.error('Error fetching tasks:', error);
+      }
     };
     fetchTasks();
   }, []);

@@ -19,12 +19,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       </head>
       <body>
         <div className="layout">
-          <header className="header">
+          <header className="nav-horizontal">
             <div className="logo-container">
-              <img src="/logo.png" alt="TaskEase Logo" className="logo" />
+              <img src="/logo.png" alt="TaskEase Logo" />
               <span className="logo-text">TaskEase</span>
             </div>
-            <nav className="nav">
+            <nav className="nav-link-container">
               <Link href="/" className="nav-link">Home</Link>
               <Link href="/login" className="nav-link">Login</Link>
               <Link href="/register" className="nav-link">Register</Link>
