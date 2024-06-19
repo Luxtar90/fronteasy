@@ -1,4 +1,3 @@
-// app/page.tsx
 'use client';
 
 import React, { useEffect, useState } from 'react';
@@ -23,12 +22,11 @@ const HomePage: React.FC = () => {
     fetchData();
   }, []);
 
-  const goToLogin = () => {
-    router.push('/login');
-  };
-
-  const goToRegister = () => {
-    router.push('/register');
+  const goToPage = (path: string) => {
+    router.push(path);
+    setTimeout(() => {
+      window.location.reload();
+    }, 500);
   };
 
   return (
@@ -40,8 +38,8 @@ const HomePage: React.FC = () => {
             <span className="logo-text">TaskEase</span>
           </div>
           <nav className="nav">
-            <button className="nav-button" onClick={goToLogin}>Contactar a ventas</button>
-            <button className="nav-button primary" onClick={goToRegister}>Ir a mi cuenta</button>
+            <button className="nav-button" onClick={() => goToPage('/login')}>Contactar a ventas</button>
+            <button className="nav-button primary" onClick={() => goToPage('/register')}>Ir a mi cuenta</button>
           </nav>
         </header>
         <div className="content">
@@ -58,7 +56,7 @@ const HomePage: React.FC = () => {
             <span>✔️ Planificación de tareas</span>
             <span>✔️ Gestión de tareas recurrentes</span>
           </div>
-          <button className="cta-button" onClick={goToRegister}>Empezar ahora</button>
+          <button className="cta-button" onClick={() => goToPage('/register')}>Empezar ahora</button>
           <p className="cta-note">Gratis para siempre. No se necesita tarjeta de crédito.</p>
         </div>
         <footer className="footer">
