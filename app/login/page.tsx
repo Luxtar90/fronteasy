@@ -19,9 +19,6 @@ const Login: React.FC = () => {
       const response = await axios.post('/auth/login', { email, password });
       setMessage('Login successful!');
       router.push('/tasks');
-      setTimeout(() => {
-        window.location.reload();
-      }, 500);
     } catch (error) {
       if (isAxiosError(error)) {
         setMessage((error.response?.data as { message: string })?.message || 'Error logging in');
@@ -79,12 +76,12 @@ const Login: React.FC = () => {
                 <input type="checkbox" id="rememberMe" />
                 <label htmlFor="rememberMe">Recuérdame</label>
               </div>
-              <a onClick={() => {router.push('/reset-password'); setTimeout(() => { window.location.reload(); }, 500);}} className="forgot-password">¿Olvidaste tu contraseña?</a>
+              <a onClick={() => router.push('/reset-password')} className="forgot-password">¿Olvidaste tu contraseña?</a>
             </div>
             <button type="submit">Iniciar Sesión</button>
           </form>
           {message && <p className="error-message">{message}</p>}
-          <p className="register-link">¿Aún no tienes cuenta? <a onClick={() => {router.push('/register'); setTimeout(() => { window.location.reload(); }, 500);}}>Regístrate</a></p>
+          <p className="register-link">¿Aún no tienes cuenta? <a onClick={() => router.push('/register')}>Regístrate</a></p>
         </div>
         <div className="login-right">
           <img src="/portada.webp" alt="Login Illustration" />
