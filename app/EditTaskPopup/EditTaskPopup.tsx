@@ -3,7 +3,7 @@
 
 import React, { useState } from 'react';
 import axios from '../../src/axiosConfig';
-import './EditTaskPopup.css'; // Asegúrate de que el archivo CSS existe
+import './EditTaskPopup.css'; // Asegúrate de que el archivo CSS exista
 import { Task } from '../../src/types';
 
 interface EditTaskPopupProps {
@@ -15,12 +15,14 @@ interface EditTaskPopupProps {
 const EditTaskPopup: React.FC<EditTaskPopupProps> = ({ task, onClose, onUpdate }) => {
   const [title, setTitle] = useState(task.title);
   const [description, setDescription] = useState(task.description);
+  const [start, setStart] = useState(task.start ? new Date(task.start).toISOString().slice(0, 16) : '');
+  const [end, setEnd] = useState(task.end ? new Date(task.end).toISOString().slice(0, 16) : '');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.put(`/tasks/${task._id}`, { title, description }, {
+      const response = await axios.put(`/tasks/${task._id}`, { title, description, start, end }, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -55,7 +57,25 @@ const EditTaskPopup: React.FC<EditTaskPopupProps> = ({ task, onClose, onUpdate }
               required
             />
           </div>
-          <button type="submit" className="btn">Actualizar</button>
+          <div className="form-group">
+            <label>Inicio</label>
+            <input
+              type="datetime-local"
+              value={start}
+              onChange={(e) => setStart(e.target.value)}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>Fin</label>
+            <input
+              type="datetime-local"
+              value={end}
+              onChange={(e) => setEnd(e.target.value)}
+              required
+            />
+          </div>
+          <button type="submit" className="btn btn-primary">Actualizar</button>
           <button type="button" className="btn btn-secondary" onClick={onClose}>Cancelar</button>
         </form>
       </div>

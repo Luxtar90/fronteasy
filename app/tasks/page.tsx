@@ -34,10 +34,6 @@ const TaskPage: React.FC = () => {
     fetchTasks();
   }, []);
 
-  const goToMyDay = () => {
-    router.push('/myday');
-  };
-
   const handleTaskAdded = () => {
     fetchTasks();
   };
@@ -50,11 +46,6 @@ const TaskPage: React.FC = () => {
     setTasks(tasks.map((task) => (task._id === updatedTask._id ? updatedTask : task)));
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    router.push('/login');
-  };
-
   return (
     <div className="taskpage-container">
       <div className="sidebar">
@@ -62,7 +53,7 @@ const TaskPage: React.FC = () => {
           <FontAwesomeIcon icon={faTasks} /> TaskEase
         </div>
         <nav className="nav">
-          <a onClick={goToMyDay} className="nav-item">
+          <a onClick={() => router.push('/myday')} className="nav-item">
             <FontAwesomeIcon icon={faHome} /> Mi día
           </a>
           <a href="/tasks" className="nav-item active">
@@ -71,16 +62,13 @@ const TaskPage: React.FC = () => {
           <a href="/completed" className="nav-item">
             <FontAwesomeIcon icon={faCheckCircle} /> Completadas
           </a>
-          <a href="/calendar" className="nav-item">
+          <a onClick={() => router.push('/calendar')} className="nav-item">
             <FontAwesomeIcon icon={faCalendarAlt} /> Calendario
           </a>
           <a onClick={() => router.push('/profile')} className="nav-item">
             <FontAwesomeIcon icon={faUser} /> Perfil
           </a>
         </nav>
-        <button className="logout-button" onClick={handleLogout}>
-          Cerrar Sesión
-        </button>
       </div>
       <div className="content">
         <div className="form-container">
@@ -93,7 +81,7 @@ const TaskPage: React.FC = () => {
           <h3>
             <FontAwesomeIcon icon={faTasks} /> Tareas
           </h3>
-          <TaskList tasks={tasks} onTaskDeleted={handleTaskDeleted} onTaskUpdated={handleTaskUpdated} />
+          <TaskList tasks={tasks.filter(task => !task.completed)} onTaskDeleted={handleTaskDeleted} onTaskUpdated={handleTaskUpdated} />
         </div>
         <div className="calendar-container">
           <h3>

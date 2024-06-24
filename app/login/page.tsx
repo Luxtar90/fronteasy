@@ -54,7 +54,7 @@ const Login: React.FC = () => {
           <form onSubmit={handleSubmit}>
             <input
               type="email"
-              placeholder="Usuario / Correo"
+              placeholder="Correo"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required

@@ -1,15 +1,15 @@
-// app/myday/page.tsx
+// app/completed/page.tsx
 'use client';
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTasks, faHome, faCheckCircle, faCalendarAlt, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faTasks, faHome, faCheckCircle, faCalendarAlt, faPlus, faUndo, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import axios from '../../src/axiosConfig';
 import { EventInput } from '@fullcalendar/core';
-import './myday.css';
+import './completedtasks.css';
 
-const MyDayPage: React.FC = () => {
+const CompletedTasksPage: React.FC = () => {
   const [tasks, setTasks] = useState<EventInput[]>([]);
   const router = useRouter();
 
@@ -43,48 +43,70 @@ const MyDayPage: React.FC = () => {
     }
   };
 
-  const handleToggleComplete = async (task: EventInput) => {
-    try {
-      const token = localStorage.getItem('token');
-      const response = await axios.patch(`/tasks/${task.id}/status`, { completed: !task.completed }, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const updatedTask = response.data;
-      setTasks((prevTasks) =>
-        prevTasks.map((t) => (t.id === updatedTask._id ? { ...t, completed: updatedTask.completed } : t))
-      );
-    } catch (error) {
-      console.error('Error updating task status:', error);
-    }
-  };
-
   useEffect(() => {
     fetchTasks();
   }, []);
 
+  const handleUndoTask = async (taskId: string | undefined) => {
+    if (!taskId) return;
+    try {
+      const token = localStorage.getItem('token');
+      await axios.put(
+        `/tasks/${taskId}/toggle-completion`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+      fetchTasks();
+    } catch (error) {
+      console.error('Error undoing task:', error);
+    }
+  };
+
+  const handleDeleteTask = async (taskId: string | undefined) => {
+    if (!taskId) return;
+    const confirmDelete = confirm('¿Estás seguro de que deseas eliminar esta tarea? Esta acción no se puede deshacer.');
+    if (!confirmDelete) {
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('token');
+      await axios.delete(`/tasks/${taskId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      fetchTasks();
+    } catch (error) {
+      console.error('Error deleting task:', error);
+    }
+  };
+
   return (
-    <div className="myday-container">
+    <div className="completedtasks-container">
       <div className="sidebar">
         <div className="logo">
           <img src="/logo.png" alt="TaskEase Logo" />
         </div>
         <nav className="nav-vertical">
-          <a onClick={() => router.push('/myday')} className="nav-item active">
+          <a onClick={() => router.push('/myday')} className="nav-item">
             <FontAwesomeIcon icon={faHome} /> Mi día
           </a>
           <a onClick={() => router.push('/tasks')} className="nav-item">
             <FontAwesomeIcon icon={faTasks} /> Tareas
           </a>
-          <a onClick={() => router.push('/completed')} className="nav-item">
+          <a onClick={() => router.push('/completed')} className="nav-item active">
             <FontAwesomeIcon icon={faCheckCircle} /> Completadas
           </a>
           <a onClick={() => router.push('/calendar')} className="nav-item">
             <FontAwesomeIcon icon={faCalendarAlt} /> Calendario
           </a>
         </nav>
-        <button className="add-task-button" onClick={() => router.push('/tasks')}>
+        <button className="add-task-button">
           <FontAwesomeIcon icon={faPlus} /> Añadir Tarea
         </button>
       </div>
@@ -96,9 +118,9 @@ const MyDayPage: React.FC = () => {
           </div>
         </div>
         <div className="task-list">
-          <h2>Mi día ({tasks.filter(task => !task.completed).length})</h2>
+          <h2>Completadas ({tasks.filter(task => task.completed).length})</h2>
           <div className="task-list-items">
-            {tasks.filter(task => !task.completed).map((task) => (
+            {tasks.filter(task => task.completed).map((task) => (
               <div key={task.id} className="task-item">
                 <div className="task-content">
                   <h3>{task.title}</h3>
@@ -106,12 +128,17 @@ const MyDayPage: React.FC = () => {
                   <p>Inicio: {task.start ? new Date(task.start as string).toLocaleString() : 'No definido'}</p>
                   <p>Fin: {task.end ? new Date(task.end as string).toLocaleString() : 'No definido'}</p>
                 </div>
-                <div className="task-status">
-                  <input
-                    type="checkbox"
-                    checked={task.completed}
-                    onChange={() => handleToggleComplete(task)}
-                  />
+                <div className="task-actions">
+                  {task.id && (
+                    <>
+                      <button onClick={() => handleUndoTask(task.id)}>
+                        <FontAwesomeIcon icon={faUndo} /> Devolver
+                      </button>
+                      <button onClick={() => handleDeleteTask(task.id)}>
+                        <FontAwesomeIcon icon={faTrashAlt} /> Eliminar
+                      </button>
+                    </>
+                  )}
                 </div>
               </div>
             ))}
@@ -122,4 +149,4 @@ const MyDayPage: React.FC = () => {
   );
 };
 
-export default MyDayPage;
+export default CompletedTasksPage;

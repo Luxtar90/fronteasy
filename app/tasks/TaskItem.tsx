@@ -2,12 +2,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import axios from '../../src/axiosConfig';
-import EditTaskPopup from '../EditTaskPopup/EditTaskPopup';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faTrashAlt, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+import { Task } from '../../src/types';
 import './task.css';
-import { Task } from '../../src/types'; // Importa el tipo Task
+import EditTaskPopup from '../EditTaskPopup/EditTaskPopup';
 
 interface TaskItemProps {
   task: Task;
@@ -39,18 +39,37 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onTaskDeleted, onTaskUpdated 
     onTaskUpdated(updatedTask);
   };
 
+  const handleToggleComplete = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.patch(`/tasks/${task._id}/status`, { completed: !task.completed }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      onTaskUpdated(response.data);
+    } catch (error) {
+      console.error('Error updating task status:', error);
+    }
+  };
+
   return (
-    <div className="task-item">
+    <div className={`task-item ${task.completed ? 'completed' : ''}`}>
       <div className="task-content">
         <h3>{task.title}</h3>
         <p>{task.description}</p>
       </div>
-      <button className="edit-button" onClick={() => setShowPopup(true)}>
-        <FontAwesomeIcon icon={faEdit} />
-      </button>
-      <button className="delete-button" onClick={handleDelete}>
-        <FontAwesomeIcon icon={faTrashAlt} />
-      </button>
+      <div className="task-actions">
+        <button onClick={handleToggleComplete} className="complete-button">
+          <FontAwesomeIcon icon={faCheckCircle} />
+        </button>
+        <button className="edit-button" onClick={() => setShowPopup(true)}>
+          <FontAwesomeIcon icon={faEdit} />
+        </button>
+        <button className="delete-button" onClick={handleDelete}>
+          <FontAwesomeIcon icon={faTrashAlt} />
+        </button>
+      </div>
       {showPopup && <EditTaskPopup task={task} onClose={() => setShowPopup(false)} onUpdate={handleUpdate} />}
     </div>
   );

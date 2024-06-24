@@ -36,8 +36,7 @@ const HomePage: React.FC = () => {
           <span className="logo-text">TaskEase</span>
         </div>
         <nav className="nav">
-          <button className="nav-button" onClick={() => goToPage('/login')}>Contactar a ventas</button>
-          <button className="nav-button primary" onClick={() => goToPage('/register')}>Ir a mi cuenta</button>
+          <button className="nav-button primary" onClick={() => goToPage('/login')}>Ir a mi cuenta</button>
         </nav>
       </header>
       <div className="content">

@@ -1,5 +1,6 @@
 'use client';
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import axios from '../../src/axiosConfig';
 import './register.css';
 
@@ -14,6 +15,8 @@ const Register: React.FC = () => {
     const [message, setMessage] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+    const router = useRouter();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -31,6 +34,7 @@ const Register: React.FC = () => {
                 password,
             });
             setMessage(response.data.message);
+            router.push('/login');
         } catch (error) {
             setMessage('Error during registration');
         }

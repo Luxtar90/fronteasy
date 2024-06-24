@@ -2,13 +2,13 @@
 
 .nav-horizontal {
   display: flex;
-  justify-content: space-between; /* Cambiado para un mejor control del espacio */
+  justify-content: space-between;
   align-items: center;
   background-color: #2c3e50;
-  padding: 15px 30px; /* Más padding para un look más espacioso */
+  padding: 15px 30px;
   margin-bottom: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Añade una sombra sutil */
-  border-radius: 8px; /* Bordes redondeados */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
 }
 
 .nav-horizontal .logo-container {
@@ -24,7 +24,7 @@
 .nav-link-container {
   display: flex;
   align-items: center;
-  gap: 20px; /* Espaciado entre enlaces */
+  gap: 20px;
 }
 
 .nav-link {
@@ -32,21 +32,49 @@
   text-decoration: none;
   font-size: 16px;
   padding: 10px 20px;
-  transition: background-color 0.3s ease, color 0.3s ease; /* Efecto de transición en color */
-  border-radius: 4px; /* Bordes redondeados para enlaces */
+  transition: background-color 0.3s ease, color 0.3s ease;
+  border-radius: 4px;
 }
 
 .nav-link:hover {
   background-color: #34495e;
-  color: #ffffff; /* Mantiene el color blanco en hover */
-}
-
-.nav-link.active {
-  background-color: #1abc9c; /* Color diferente para el enlace activo */
   color: #ffffff;
 }
 
-/* Botón Home */
+.nav-link.active {
+  background-color: #1abc9c;
+  color: #ffffff;
+}
+
+.settings {
+  position: relative;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #2c3e50;
+  border-radius: 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 10px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdown-item {
+  color: white;
+  text-decoration: none;
+  padding: 10px 20px;
+  transition: background-color 0.3s ease;
+  white-space: nowrap;
+}
+
+.dropdown-item:hover {
+  background-color: #34495e;
+  color: #ffffff;
+}
+
 .top-left-button {
   position: absolute;
   top: 20px;
@@ -55,21 +83,113 @@
   color: white;
   padding: 10px 20px;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.3s ease; /* Transición en el color y la transformación */
-  border: none; /* Sin borde */
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  border: none;
 }
 
 .top-left-button:hover {
-  background-color: #16a085; /* Cambio de color en hover */
-  transform: translateY(-3px); /* Levanta el botón en hover */
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Aumenta la sombra en hover */
+  background-color: #16a085;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .top-left-button:active {
-  transform: translateY(0); /* Elimina la elevación en clic */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Reduce la sombra en clic */
+  transform: translateY(0);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+/* profile.css */
+
+.profile-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+}
+
+.profile-container:hover {
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.profile-container h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #2c3e50;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.profile-form,
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 8px;
+    color: #2c3e50;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 16px;
+    transition: all 0.3s ease-in-out;
+}
+
+.form-group input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+}
+
+.form-group p {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 16px;
+    background-color: #f7f7f7;
+}
+
+.update-button,
+.edit-button {
+    padding: 12px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    align-self: center;
+}
+
+.update-button:hover,
+.edit-button:hover {
+    background-color: #0056b3;
+    box-shadow: 0 6px 12px rgba(0, 123, 255, 0.2);
+}
+
+.message {
+    text-align: center;
+    margin-top: 20px;
+    color: #28a745;
+    font-size: 16px;
+    font-weight: bold;
 }

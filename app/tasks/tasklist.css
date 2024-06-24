@@ -1,0 +1,40 @@
+/* tasklist.css */
+.task-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .task-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .task-item.completed {
+    background: #f0f8ff;
+  }
+  
+  .task-content {
+    flex: 1;
+  }
+  
+  .task-content h3 {
+    margin: 0;
+  }
+  
+  .task-content p {
+    margin: 0;
+    color: #888;
+  }
+  
+  .task-actions {
+    display: flex;
+    gap: 10px;
+  }
+  
