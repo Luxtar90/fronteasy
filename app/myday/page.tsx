@@ -16,7 +16,12 @@ const MyDayPage: React.FC = () => {
 
   const fetchTasks = async () => {
     try {
-      const response = await axios.get('/tasks'); // Ajusta la URL según tu API
+      const token = localStorage.getItem('token');
+      const response = await axios.get('/tasks', {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
       const events = response.data.map((task: any) => {
         const start = isValidDate(task.start) ? new Date(task.start) : new Date();
         const end = isValidDate(task.end) ? new Date(task.end) : new Date();
@@ -73,7 +78,7 @@ const MyDayPage: React.FC = () => {
         <div className="task-list">
           <h2>Mi día ({tasks.length})</h2>
           <div className="task-list-items">
-            {tasks.map((task) => (
+            {tasks.filter(task => !task.completed).map((task) => (
               <div key={task.id} className="task-item">
                 <div className="task-content">
                   <h3>{task.title}</h3>

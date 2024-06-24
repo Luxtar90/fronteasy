@@ -208,8 +208,4 @@ button[type="submit"]:hover {
     width: 90%;
     height: auto;
   }
-
-  .login-right {
-    display: none;
-  }
 }

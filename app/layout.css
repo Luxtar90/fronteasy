@@ -45,3 +45,31 @@
   background-color: #1abc9c; /* Color diferente para el enlace activo */
   color: #ffffff;
 }
+
+/* Botón Home */
+.top-left-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: #1abc9c;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Transición en el color y la transformación */
+  border: none; /* Sin borde */
+}
+
+.top-left-button:hover {
+  background-color: #16a085; /* Cambio de color en hover */
+  transform: translateY(-3px); /* Levanta el botón en hover */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Aumenta la sombra en hover */
+}
+
+.top-left-button:active {
+  transform: translateY(0); /* Elimina la elevación en clic */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Reduce la sombra en clic */
+}

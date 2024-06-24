@@ -1,23 +1,31 @@
-// TaskForm.tsx
 'use client';
+
 import React, { useState } from 'react';
 import axios from '../../src/axiosConfig';
-import './task.css'; // Asegúrate de ajustar el CSS
+import './task.css';
 
-const TaskForm: React.FC = () => {
+interface TaskFormProps {
+  onTaskAdded: () => void;
+}
+
+const TaskForm: React.FC<TaskFormProps> = ({ onTaskAdded }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/tasks', { title, description });
-      console.log(response.data);
+      const token = localStorage.getItem('token');
+      await axios.post('/tasks', { title, description }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setTitle('');
       setDescription('');
-      // Optionally, refresh the task list here
+      onTaskAdded();
     } catch (error) {
-      console.error(error);
+      console.error('Error adding task:', error);
     }
   };
 

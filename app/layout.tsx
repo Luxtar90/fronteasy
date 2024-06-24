@@ -1,7 +1,7 @@
 'use client';
 
 import React, { ReactNode } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import './layout.css';
 
 interface LayoutProps {
@@ -10,6 +10,7 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const router = useRouter();
+  const pathname = usePathname();
 
   const goToPage = (path: string) => {
     router.push(path);
@@ -17,6 +18,20 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       window.location.reload();
     }, 500);
   };
+
+  // Si la ruta es login, register o reset-password, muestra solo el botón "Home"
+  if (pathname === '/login' || pathname === '/register' || pathname === '/reset-password') {
+    return (
+      <html lang="en">
+        <body>
+          <button className="top-left-button" onClick={() => goToPage('/')}>
+            Home
+          </button>
+          {children}
+        </body>
+      </html>
+    );
+  }
 
   return (
     <html lang="en">
@@ -38,6 +53,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               <a onClick={() => goToPage('/register')} className="nav-link">Register</a>
               <a onClick={() => goToPage('/reset-password')} className="nav-link">Reset Password</a>
               <a onClick={() => goToPage('/tasks')} className="nav-link">Tasks</a>
+             
             </nav>
           </header>
           <main>

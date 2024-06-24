@@ -1,3 +1,4 @@
+// app/login/page.tsx
 'use client';
 
 import React, { useState } from 'react';
@@ -18,6 +19,8 @@ const Login: React.FC = () => {
     try {
       const response = await axios.post('/auth/login', { email, password });
       setMessage('Login successful!');
+      // Almacena el token en localStorage
+      localStorage.setItem('token', response.data.token);
       router.push('/tasks');
     } catch (error) {
       if (isAxiosError(error)) {
