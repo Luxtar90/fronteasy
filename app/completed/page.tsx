@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTasks, faHome, faCheckCircle, faCalendarAlt, faPlus, faUndo, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import axios from '../../src/axiosConfig';
 import { EventInput } from '@fullcalendar/core';
-import './completedtasks.css';
+import './completedTasks.css';
 
 const CompletedTasksPage: React.FC = () => {
   const [tasks, setTasks] = useState<EventInput[]>([]);
