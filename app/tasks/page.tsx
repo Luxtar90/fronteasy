@@ -18,13 +18,6 @@ const TaskPage: React.FC = () => {
   const fetchTasks = async () => {
     try {
       const token = localStorage.getItem('token');
-      if (!token) {
-        router.push('/login');
-        return;
-      }
-
-      console.log('Token usado para la petición:', token);
-
       const response = await axios.get('/tasks', {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -33,14 +26,17 @@ const TaskPage: React.FC = () => {
       setTasks(response.data);
     } catch (error) {
       console.error('Error fetching tasks:', error);
-      if (error.response && error.response.status === 401) {
-        router.push('/login');
-      }
     }
   };
 
   useEffect(() => {
-    fetchTasks();
+    const reloadTasks = localStorage.getItem('reloadTasks');
+    if (reloadTasks) {
+      localStorage.removeItem('reloadTasks');
+      window.location.reload();
+    } else {
+      fetchTasks();
+    }
   }, []);
 
   const handleTaskAdded = () => {
