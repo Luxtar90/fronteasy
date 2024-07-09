@@ -1,7 +1,6 @@
-// app/login/page.tsx
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from '../../src/axiosConfig';
 import { isAxiosError } from '../../src/utils/axiosUtils';
@@ -12,17 +11,37 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [emailSuggestions, setEmailSuggestions] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    const storedEmails = JSON.parse(localStorage.getItem('emails') || '[]');
+    setEmailSuggestions(storedEmails);
+  }, []);
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       const response = await axios.post('/auth/login', { email, password });
       setMessage('Login successful!');
-      // Almacena el token en localStorage
       localStorage.setItem('token', response.data.token);
+
+      const storedEmails = JSON.parse(localStorage.getItem('emails') || '[]');
+      if (!storedEmails.includes(email)) {
+        storedEmails.push(email);
+        localStorage.setItem('emails', JSON.stringify(storedEmails));
+      }
+
+      localStorage.setItem('reloadTasks', 'true');
       router.push('/tasks');
     } catch (error) {
+      setIsLoading(false);
       if (isAxiosError(error)) {
         setMessage((error.response?.data as { message: string })?.message || 'Error logging in');
       } else {
@@ -30,6 +49,27 @@ const Login: React.FC = () => {
       }
     }
   };
+
+  const handleGoogleLogin = () => {
+    window.location.href = `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/google`;
+  };
+
+  if (isLoading) {
+    return (
+      <div className="loading-screen">
+        <div className="loader">
+          <div className="pencil">
+            <div className="pencil__ball-point"></div>
+            <div className="pencil__cap"></div>
+            <div className="pencil__cap-base"></div>
+            <div className="pencil__middle"></div>
+            <div className="pencil__eraser"></div>
+          </div>
+          <div className="line"></div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="login-container">
@@ -43,7 +83,7 @@ const Login: React.FC = () => {
             <button className="social-button facebook">
               <img src="/facebook.png" alt="Facebook" />
             </button>
-            <button className="social-button google">
+            <button className="social-button google" onClick={handleGoogleLogin}>
               <img src="/google.png" alt="Google" />
             </button>
             <button className="social-button apple">
@@ -56,9 +96,15 @@ const Login: React.FC = () => {
               type="email"
               placeholder="Correo"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={handleEmailChange}
+              list="email-suggestions"
               required
             />
+            <datalist id="email-suggestions">
+              {emailSuggestions.map((suggestion, index) => (
+                <option key={index} value={suggestion} />
+              ))}
+            </datalist>
             <div className="password-container">
               <input
                 type={showPassword ? "text" : "password"}

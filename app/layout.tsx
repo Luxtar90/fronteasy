@@ -1,8 +1,9 @@
-// app/layout.tsx
 'use client';
 
 import React, { ReactNode, useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import './layout.css';
 
 interface LayoutProps {
@@ -12,7 +13,6 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const router = useRouter();
   const pathname = usePathname();
-  const [showDropdown, setShowDropdown] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
@@ -31,7 +31,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const handleLogout = () => {
     localStorage.removeItem('token');
     setIsAuthenticated(false);
-    router.push('/login');
+    router.push('/');
     setTimeout(() => {
       window.location.reload();
     }, 500);
@@ -65,28 +65,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               <span className="logo-text">TaskEase</span>
             </div>
             <nav className="nav-link-container">
-              {!isAuthenticated && <a onClick={() => goToPage('/login')} className="nav-link">Login</a>}
-              {!isAuthenticated && <a onClick={() => goToPage('/register')} className="nav-link">Register</a>}
               <a onClick={() => goToPage('/reset-password')} className="nav-link">Reset Password</a>
-              {isAuthenticated && <a onClick={() => goToPage('/tasks')} className="nav-link">Tasks</a>}
-              {isAuthenticated && <a onClick={() => goToPage('/completed')} className="nav-link">Completed Tasks</a>}
               {isAuthenticated && (
-                <div
-                  className="nav-link settings"
-                  onMouseEnter={() => setShowDropdown(true)}
-                  onMouseLeave={() => setShowDropdown(false)}
-                >
-                  Settings
-                  {showDropdown && (
-                    <div className="dropdown-menu">
-                      <a onClick={() => goToPage('/profile')} className="dropdown-item">Profile</a>
-                      <a onClick={() => goToPage('/settings/edit-profile')} className="dropdown-item">Edit Profile</a>
-                      <a onClick={() => goToPage('/settings/change-password')} className="dropdown-item">Change Password</a>
-                      <a onClick={() => goToPage('/settings/reset-password')} className="dropdown-item">Reset Password</a>
-                      <a onClick={handleLogout} className="dropdown-item">Logout</a>
-                    </div>
-                  )}
-                </div>
+                <button className="nav-link logout" onClick={handleLogout}>
+                  <FontAwesomeIcon icon={faSignOutAlt} />
+                </button>
               )}
             </nav>
           </header>
