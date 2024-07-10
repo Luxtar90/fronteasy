@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from '../../src/axiosConfig';
-import './TaskForm.css';
+import './taskForm.css';
 import { Task } from '../../src/types';
 
 interface TaskFormProps {
