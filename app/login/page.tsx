@@ -54,6 +54,10 @@ const Login: React.FC = () => {
     window.location.href = `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/google`;
   };
 
+  const handleFacebookLogin = () => {
+    window.location.href = `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/facebook`;
+  };
+
   if (isLoading) {
     return (
       <div className="loading-screen">
@@ -80,7 +84,7 @@ const Login: React.FC = () => {
             <h2>Inicia Sesión</h2>
           </div>
           <div className="social-login">
-            <button className="social-button facebook">
+            <button className="social-button facebook" onClick={handleFacebookLogin}>
               <img src="/facebook.png" alt="Facebook" />
             </button>
             <button className="social-button google" onClick={handleGoogleLogin}>
