@@ -7,7 +7,7 @@ import CalendarComponent from './CalendarComponent';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTasks, faPlus, faHome, faCalendarAlt, faCheckCircle, faUser, faBars, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import axios from '../../src/axiosConfig';
-import { useRouter, usePathname } from 'next/navigation'; // Importar usePathname
+import { useRouter, usePathname } from 'next/navigation';
 import './task.css';
 import { Task } from '../../src/types';
 
@@ -16,7 +16,7 @@ const TaskPage: React.FC = () => {
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const router = useRouter();
-  const pathname = usePathname(); // Obtener la ruta actual
+  const pathname = usePathname();
 
   const fetchTasks = async () => {
     try {
@@ -42,10 +42,11 @@ const TaskPage: React.FC = () => {
 
   useEffect(() => {
     fetchTasks();
-  }, [pathname]); // Se ejecuta cuando se cambia la ruta
+  }, [pathname]);
 
   const handleTaskAdded = () => {
     fetchTasks();
+    setShowModal(false); 
   };
 
   const handleTaskDeleted = (taskId: string) => {

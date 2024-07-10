@@ -4,7 +4,11 @@ import { Task } from '../../src/types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import EditTaskPopup from '../EditTaskPopup/EditTaskPopup';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 import './tasklist.css';
+
+const MySwal = withReactContent(Swal);
 
 const TaskList: React.FC<{
   tasks: Task[];
@@ -39,16 +43,37 @@ const TaskList: React.FC<{
   };
 
   const handleDeleteTask = async (taskId: string) => {
-    if (confirm('¿Estás seguro de que deseas eliminar esta tarea? Esta acción no se puede deshacer.')) {
+    const result = await MySwal.fire({
+      title: '¿Estás seguro?',
+      text: 'Una vez eliminada, no se puede recuperar la tarea.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+      customClass: {
+        confirmButton: 'btn btn-primary',
+        cancelButton: 'btn btn-secondary',
+      },
+      buttonsStyling: false,
+    });
+
+    if (result.isConfirmed) {
       setLoading(true);
-      const token = localStorage.getItem('token');
-      await axios.delete(`/tasks/${taskId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      onTaskDeleted(taskId);
-      setLoading(false);
+      try {
+        const token = localStorage.getItem('token');
+        await axios.delete(`/tasks/${taskId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        onTaskDeleted(taskId);
+        MySwal.fire('Eliminada', 'La tarea ha sido eliminada.', 'success');
+      } catch (error) {
+        console.error('Error deleting task:', error);
+        MySwal.fire('Error', 'Hubo un problema al eliminar la tarea.', 'error');
+      } finally {
+        setLoading(false);
+      }
     }
   };
 

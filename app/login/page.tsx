@@ -38,8 +38,11 @@ const Login: React.FC = () => {
         localStorage.setItem('emails', JSON.stringify(storedEmails));
       }
 
-      localStorage.setItem('reloadTasks', 'true');
-      router.push('/tasks');
+      // Redirigir y recargar la página de tareas
+      router.replace('/tasks');
+      setTimeout(() => {
+        window.location.reload();
+      }, 500);
     } catch (error) {
       setIsLoading(false);
       if (isAxiosError(error)) {
