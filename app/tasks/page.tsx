@@ -1,43 +1,48 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TaskForm from './TaskForm';
 import TaskList from './TaskList';
 import CalendarComponent from './CalendarComponent';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTasks, faPlus, faHome, faCalendarAlt, faCheckCircle, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faTasks, faPlus, faHome, faCalendarAlt, faCheckCircle, faUser, faBars, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import axios from '../../src/axiosConfig';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation'; // Importar usePathname
 import './task.css';
 import { Task } from '../../src/types';
 
 const TaskPage: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [sidebarVisible, setSidebarVisible] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const router = useRouter();
+  const pathname = usePathname(); // Obtener la ruta actual
 
   const fetchTasks = async () => {
     try {
       const token = localStorage.getItem('token');
+      if (!token) {
+        router.push('/login');
+        return;
+      }
+
       const response = await axios.get('/tasks', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       setTasks(response.data);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error fetching tasks:', error);
+      if (error.response && error.response.status === 401) {
+        router.push('/login');
+      }
     }
   };
 
   useEffect(() => {
-    const reloadTasks = localStorage.getItem('reloadTasks');
-    if (reloadTasks) {
-      localStorage.removeItem('reloadTasks');
-      window.location.reload();
-    } else {
-      fetchTasks();
-    }
-  }, []);
+    fetchTasks();
+  }, [pathname]); // Se ejecuta cuando se cambia la ruta
 
   const handleTaskAdded = () => {
     fetchTasks();
@@ -51,9 +56,40 @@ const TaskPage: React.FC = () => {
     setTasks(tasks.map((task) => (task._id === updatedTask._id ? updatedTask : task)));
   };
 
+  const toggleSidebar = () => {
+    setSidebarVisible(!sidebarVisible);
+  };
+
+  const handleOverlayClick = () => {
+    setSidebarVisible(false);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    router.push('/login');
+  };
+
+  const openModal = () => {
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
   return (
     <div className="taskpage-container">
-      <div className="sidebar">
+      <div className="header-bar">
+        <div className="logo">TaskEase</div>
+        <div className="menu-toggle" onClick={toggleSidebar}>
+          <FontAwesomeIcon icon={faBars} size="2x" />
+        </div>
+        <div className="logout" onClick={handleLogout}>
+          <FontAwesomeIcon icon={faSignOutAlt} /> Logout
+        </div>
+      </div>
+      <div className={`overlay ${sidebarVisible ? 'visible' : ''}`} onClick={handleOverlayClick}></div>
+      <div className={`sidebar ${sidebarVisible ? 'visible' : ''}`}>
         <div className="logo">
           <FontAwesomeIcon icon={faTasks} /> TaskEase
         </div>
@@ -76,12 +112,6 @@ const TaskPage: React.FC = () => {
         </nav>
       </div>
       <div className="content">
-        <div className="form-container">
-          <h3>
-            <FontAwesomeIcon icon={faPlus} /> Añadir Tarea
-          </h3>
-          <TaskForm onTaskAdded={handleTaskAdded} />
-        </div>
         <div className="task-list-container">
           <h3>
             <FontAwesomeIcon icon={faTasks} /> Tareas
@@ -95,6 +125,20 @@ const TaskPage: React.FC = () => {
           <CalendarComponent tasks={tasks} />
         </div>
       </div>
+      <button className="floating-button" onClick={openModal}>
+        <FontAwesomeIcon icon={faPlus} />
+      </button>
+      {showModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h3>Añadir Tarea</h3>
+              <span className="close" onClick={closeModal}>&times;</span>
+            </div>
+            <TaskForm onTaskAdded={handleTaskAdded} />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

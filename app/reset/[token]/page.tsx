@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import axios from '../../../src/axiosConfig';
+import axios, { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
 import { useParams } from 'next/navigation';
 import './resetpassword.css';
@@ -10,6 +10,7 @@ const ResetPasswordPage: React.FC = () => {
     const [newPassword, setNewPassword] = useState('');
     const [confirmNewPassword, setConfirmNewPassword] = useState('');
     const [message, setMessage] = useState('');
+    const [success, setSuccess] = useState(false);
     const router = useRouter();
     const { token } = useParams();
 
@@ -24,17 +25,33 @@ const ResetPasswordPage: React.FC = () => {
         }
 
         try {
-            const response = await axios.post('/auth/reset-password', { token, newPassword });
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/reset-password`, { token, newPassword });
             setMessage(response.data.message);
+            setSuccess(true);
+
+            // Redirigir al login después de 3 segundos
+            setTimeout(() => {
+                router.push('/login');
+            }, 3000);
         } catch (error) {
             console.error('Error al restablecer la contraseña:', error);
-            setMessage('Error al restablecer la contraseña');
+            if (axios.isAxiosError(error) && error.response) {
+                if (error.response.status === 400) {
+                    setMessage('El token es inválido o ya ha sido usado');
+                } else if (error.response.status === 404) {
+                    setMessage('El token no se encontró');
+                } else {
+                    setMessage('Error al restablecer la contraseña');
+                }
+            } else {
+                setMessage('Error al restablecer la contraseña');
+            }
         }
     };
 
     return (
         <div className="reset-password-container">
-            <div className="reset-password-box">
+            <div className={`reset-password-box ${success ? 'success' : ''}`}>
                 <h2>Restablecer Contraseña</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
@@ -56,7 +73,7 @@ const ResetPasswordPage: React.FC = () => {
                         />
                     </div>
                     <button type="submit" className="btn">Restablecer Contraseña</button>
-                    {message && <p className="error-message">{message}</p>}
+                    {message && <p className={`message ${success ? 'success' : 'error'}`}>{message}</p>}
                 </form>
             </div>
         </div>

@@ -1,71 +1,93 @@
-// app/tasks/TaskForm.tsx
-'use client';
-
 import React, { useState } from 'react';
 import axios from '../../src/axiosConfig';
-import './taskform.css';
+import './TaskForm.css';
+import { Task } from '../../src/types';
 
-const TaskForm: React.FC<{ onTaskAdded: () => void }> = ({ onTaskAdded }) => {
+interface TaskFormProps {
+  onTaskAdded: (newTask: Task) => void;
+}
+
+const TaskForm: React.FC<TaskFormProps> = ({ onTaskAdded }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  const [start, setStart] = useState('');
+  const [end, setEnd] = useState('');
+  const [color, setColor] = useState('#1abc9c'); // Añadir estado para color
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       const token = localStorage.getItem('token');
-      await axios.post(
-        '/tasks',
-        { title, description, start: startDate, end: endDate },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      onTaskAdded();
+      const response = await axios.post('/tasks', { title, description, start, end, color }, { // Enviar color al backend
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      onTaskAdded(response.data);
       setTitle('');
       setDescription('');
-      setStartDate('');
-      setEndDate('');
+      setStart('');
+      setEnd('');
+      setColor('#1abc9c'); // Restablecer color
     } catch (error) {
-      console.error('Error creating task:', error);
+      console.error('Error adding task:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <form className="task-form" onSubmit={handleSubmit}>
-      <div className="input-group">
+    <form onSubmit={handleSubmit}>
+      <div className="form-group">
+        <label>Título</label>
         <input
           type="text"
-          placeholder="Título de la tarea"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           required
         />
-        <textarea
-          placeholder="Descripción"
+      </div>
+      <div className="form-group">
+        <label>Descripción</label>
+        <input
+          type="text"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           required
         />
       </div>
-      <div className="date-inputs">
+      <div className="form-group">
+        <label>Inicio</label>
         <input
           type="datetime-local"
-          value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
-          required
-        />
-        <input
-          type="datetime-local"
-          value={endDate}
-          onChange={(e) => setEndDate(e.target.value)}
+          value={start}
+          onChange={(e) => setStart(e.target.value)}
           required
         />
       </div>
-      <button type="submit">Añadir Tarea</button>
+      <div className="form-group">
+        <label>Fin</label>
+        <input
+          type="datetime-local"
+          value={end}
+          onChange={(e) => setEnd(e.target.value)}
+          required
+        />
+      </div>
+      <div className="form-group">
+        <label>Color</label>
+        <input
+          type="color"
+          value={color}
+          onChange={(e) => setColor(e.target.value)}
+          required
+        />
+      </div>
+      <button type="submit" className="btn btn-primary" disabled={isLoading}>
+        {isLoading ? <div className="loader"></div> : 'Añadir Tarea'}
+      </button>
     </form>
   );
 };

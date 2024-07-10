@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTasks, faHome, faCheckCircle, faCalendarAlt, faPlus, faUndo, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import axios from '../../src/axiosConfig';
 import { EventInput } from '@fullcalendar/core';
+import Layout from '../components/layout'; // Asegúrate de que esta ruta sea correcta
 import './completedTasks.css';
 
 const CompletedTasksPage: React.FC = () => {
@@ -87,29 +88,7 @@ const CompletedTasksPage: React.FC = () => {
   };
 
   return (
-    <div className="completedtasks-container">
-      <div className="sidebar">
-        <div className="logo">
-          <img src="/logo.png" alt="TaskEase Logo" />
-        </div>
-        <nav className="nav-vertical">
-          <a onClick={() => router.push('/myday')} className="nav-item">
-            <FontAwesomeIcon icon={faHome} /> Mi día
-          </a>
-          <a onClick={() => router.push('/tasks')} className="nav-item">
-            <FontAwesomeIcon icon={faTasks} /> Tareas
-          </a>
-          <a onClick={() => router.push('/completed')} className="nav-item active">
-            <FontAwesomeIcon icon={faCheckCircle} /> Completadas
-          </a>
-          <a onClick={() => router.push('/calendar')} className="nav-item">
-            <FontAwesomeIcon icon={faCalendarAlt} /> Calendario
-          </a>
-        </nav>
-        <button className="add-task-button">
-          <FontAwesomeIcon icon={faPlus} /> Añadir Tarea
-        </button>
-      </div>
+    <Layout>
       <div className="content">
         <div className="header">
           <input type="text" placeholder="Buscar" className="search-bar" />
@@ -145,7 +124,7 @@ const CompletedTasksPage: React.FC = () => {
           </div>
         </div>
       </div>
-    </div>
+    </Layout>
   );
 };
 

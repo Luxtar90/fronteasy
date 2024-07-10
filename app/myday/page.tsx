@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTasks, faHome, faCheckCircle, faCalendarAlt, faPlus } from '@fortawesome/free-solid-svg-icons';
 import axios from '../../src/axiosConfig';
 import { EventInput } from '@fullcalendar/core';
+import Layout from '../components/layout'; // Importa el Layout
 import './myday.css';
 
 const MyDayPage: React.FC = () => {
@@ -65,60 +66,40 @@ const MyDayPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="myday-container">
-      <div className="sidebar">
-        <div className="logo">
-          <img src="/logo.png" alt="TaskEase Logo" />
-        </div>
-        <nav className="nav-vertical">
-          <a onClick={() => router.push('/myday')} className="nav-item active">
-            <FontAwesomeIcon icon={faHome} /> Mi día
-          </a>
-          <a onClick={() => router.push('/tasks')} className="nav-item">
-            <FontAwesomeIcon icon={faTasks} /> Tareas
-          </a>
-          <a onClick={() => router.push('/completed')} className="nav-item">
-            <FontAwesomeIcon icon={faCheckCircle} /> Completadas
-          </a>
-          <a onClick={() => router.push('/calendar')} className="nav-item">
-            <FontAwesomeIcon icon={faCalendarAlt} /> Calendario
-          </a>
-        </nav>
-        <button className="add-task-button" onClick={() => router.push('/tasks')}>
-          <FontAwesomeIcon icon={faPlus} /> Añadir Tarea
-        </button>
-      </div>
-      <div className="content">
-        <div className="header">
-          <input type="text" placeholder="Buscar" className="search-bar" />
-          <div className="user-icons">
-            {/* Añadir iconos de usuario aquí */}
+    <Layout>
+      <div className="myday-container">
+        <div className="content">
+          <div className="header">
+            <input type="text" placeholder="Buscar" className="search-bar" />
+            <div className="user-icons">
+              {/* Añadir iconos de usuario aquí */}
+            </div>
           </div>
-        </div>
-        <div className="task-list">
-          <h2>Mi día ({tasks.filter(task => !task.completed).length})</h2>
-          <div className="task-list-items">
-            {tasks.filter(task => !task.completed).map((task) => (
-              <div key={task.id} className="task-item">
-                <div className="task-content">
-                  <h3>{task.title}</h3>
-                  <p>{task.description}</p>
-                  <p>Inicio: {task.start ? new Date(task.start as string).toLocaleString() : 'No definido'}</p>
-                  <p>Fin: {task.end ? new Date(task.end as string).toLocaleString() : 'No definido'}</p>
+          <div className="task-list">
+            <h2>Mi día ({tasks.filter(task => !task.completed).length})</h2>
+            <div className="task-list-items">
+              {tasks.filter(task => !task.completed).map((task) => (
+                <div key={task.id} className="task-item">
+                  <div className="task-content">
+                    <h3>{task.title}</h3>
+                    <p>{task.description}</p>
+                    <p>Inicio: {task.start ? new Date(task.start as string).toLocaleString() : 'No definido'}</p>
+                    <p>Fin: {task.end ? new Date(task.end as string).toLocaleString() : 'No definido'}</p>
+                  </div>
+                  <div className="task-status">
+                    <input
+                      type="checkbox"
+                      checked={task.completed}
+                      onChange={() => handleToggleComplete(task)}
+                    />
+                  </div>
                 </div>
-                <div className="task-status">
-                  <input
-                    type="checkbox"
-                    checked={task.completed}
-                    onChange={() => handleToggleComplete(task)}
-                  />
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </Layout>
   );
 };
 

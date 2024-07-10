@@ -1,6 +1,3 @@
-// app/tasks/TaskList.tsx
-'use client';
-
 import React, { useState } from 'react';
 import axios from '../../src/axiosConfig';
 import { Task } from '../../src/types';
@@ -15,8 +12,10 @@ const TaskList: React.FC<{
   onTaskUpdated: (updatedTask: Task) => void;
 }> = ({ tasks, onTaskDeleted, onTaskUpdated }) => {
   const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const handleToggleCompletion = async (taskId: string) => {
+    setLoading(true);
     try {
       const token = localStorage.getItem('token');
       await axios.put(
@@ -34,11 +33,14 @@ const TaskList: React.FC<{
       onTaskUpdated(updatedTasks.find(task => task._id === taskId)!);
     } catch (error) {
       console.error('Error toggling task completion:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleDeleteTask = async (taskId: string) => {
     if (confirm('¿Estás seguro de que deseas eliminar esta tarea? Esta acción no se puede deshacer.')) {
+      setLoading(true);
       const token = localStorage.getItem('token');
       await axios.delete(`/tasks/${taskId}`, {
         headers: {
@@ -46,6 +48,7 @@ const TaskList: React.FC<{
         },
       });
       onTaskDeleted(taskId);
+      setLoading(false);
     }
   };
 
@@ -69,14 +72,14 @@ const TaskList: React.FC<{
             <p>Fin: {task.end ? new Date(task.end).toLocaleString() : 'No definido'}</p>
           </div>
           <div className="task-actions">
-            <button onClick={() => handleToggleCompletion(task._id)}>
-              <FontAwesomeIcon icon={faCheckCircle} />
+            <button onClick={() => handleToggleCompletion(task._id)} disabled={loading}>
+              {loading ? 'Cargando...' : <FontAwesomeIcon icon={faCheckCircle} />}
             </button>
-            <button onClick={() => handleEditTask(task)}>
+            <button onClick={() => handleEditTask(task)} disabled={loading}>
               <FontAwesomeIcon icon={faEdit} />
             </button>
-            <button onClick={() => handleDeleteTask(task._id)}>
-              <FontAwesomeIcon icon={faTrashAlt} />
+            <button onClick={() => handleDeleteTask(task._id)} disabled={loading}>
+              {loading ? 'Cargando...' : <FontAwesomeIcon icon={faTrashAlt} />}
             </button>
           </div>
         </div>
