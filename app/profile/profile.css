@@ -1,92 +1,67 @@
 /* profile.css */
 
 .profile-container {
-    max-width: 600px;
+    max-width: 800px;
     margin: 0 auto;
     padding: 30px;
     background-color: #ffffff;
     border-radius: 15px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease-in-out;
-}
-
-.profile-container:hover {
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
-}
-
-.profile-container h2 {
+  }
+  
+  .profile-container h2 {
     text-align: center;
     margin-bottom: 25px;
     color: #2c3e50;
     font-size: 24px;
     font-weight: bold;
-}
-
-.profile-form,
-.profile-info {
+  }
+  
+  .profile-info {
     display: flex;
     flex-direction: column;
     gap: 20px;
-}
-
-.form-group {
+  }
+  
+  .profile-field {
     display: flex;
-    flex-direction: column;
-}
-
-.form-group label {
-    margin-bottom: 8px;
-    color: #2c3e50;
-    font-weight: bold;
-    font-size: 14px;
-}
-
-.form-group input {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  .profile-field span {
     font-size: 16px;
-    transition: all 0.3s ease-in-out;
-}
-
-.form-group input:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
-}
-
-.form-group p {
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    font-size: 16px;
-    background-color: #f7f7f7;
-}
-
-.update-button,
-.edit-button {
-    padding: 12px 20px;
-    background-color: #007bff;
-    color: white;
+    color: #4a4a4a;
+  }
+  
+  .profile-field button {
+    background: none;
     border: none;
-    border-radius: 10px;
-    font-size: 16px;
-    font-weight: bold;
+    color: #007bff;
     cursor: pointer;
-    transition: all 0.3s ease-in-out;
-    align-self: center;
-}
-
-.update-button:hover,
-.edit-button:hover {
-    background-color: #0056b3;
-    box-shadow: 0 6px 12px rgba(0, 123, 255, 0.2);
-}
-
-.message {
+    font-size: 14px;
+    transition: color 0.3s;
+  }
+  
+  .profile-field button:hover {
+    color: #0056b3;
+  }
+  
+  .message {
     text-align: center;
     margin-top: 20px;
-    color: #28a745;
     font-size: 16px;
     font-weight: bold;
-}
+  }
+  
+  .message.success {
+    color: #28a745;
+  }
+  
+  .message.error {
+    color: #dc3545;
+  }
+  

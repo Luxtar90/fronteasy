@@ -1,0 +1,67 @@
+/* app/components/EditModal.css */
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .modal-content {
+    background: white;
+    padding: 30px; /* Aumentar el padding para dar más espacio */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    max-width: 400px;
+    width: 100%;
+  }
+  
+  .modal-content h3 {
+    margin-bottom: 20px;
+    font-size: 20px;
+    color: #4a4a4a;
+  }
+  
+  .modal-content input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box; /* Asegurarse de que el padding se incluya en el tamaño total */
+  }
+  
+  .modal-content button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .modal-content button:first-of-type {
+    background-color: #007bff;
+    color: white;
+    margin-right: 10px;
+  }
+  
+  .modal-content button:first-of-type:hover {
+    background-color: #0056b3;
+  }
+  
+  .modal-content button:last-of-type {
+    background-color: #f5f5f5;
+    color: #4a4a4a;
+  }
+  
+  .modal-content button:last-of-type:hover {
+    background-color: #e0e0e0;
+  }
+  
