@@ -29,22 +29,12 @@ const Login: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [emailSuggestions, setEmailSuggestions] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
     const storedEmails = JSON.parse(localStorage.getItem('emails') || '[]');
     setEmailSuggestions(storedEmails);
   }, []);
-
-  useEffect(() => {
-    if (isLoggedIn) {
-      router.replace('/tasks');
-      setTimeout(() => {
-        window.location.reload();
-      }, 500);
-    }
-  }, [isLoggedIn, router]);
 
   const handleEmailChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -64,7 +54,10 @@ const Login: React.FC = () => {
         localStorage.setItem('emails', JSON.stringify(storedEmails));
       }
 
-      setIsLoggedIn(true);
+      router.replace('/tasks');
+      setTimeout(() => {
+        window.location.reload();
+      }, 500);
     } catch (error) {
       setIsLoading(false);
       if (isAxiosError(error)) {
@@ -73,7 +66,7 @@ const Login: React.FC = () => {
         setMessage('Unknown error');
       }
     }
-  }, [email, password]);
+  }, [email, password, router]);
 
   const handleGoogleLogin = useCallback(() => {
     window.location.href = `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/google`;
