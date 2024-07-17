@@ -3,7 +3,8 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from '../../src/axiosConfig';
-import Layout from '../components/layout'; // Asegúrate de que esta ruta sea correcta
+import Layout from '../components/layout'; // Ajusta la ruta si es necesario
+import EditModal from '../components/EditModal';
 import './profile.css';
 
 const ProfilePage: React.FC = () => {
@@ -15,7 +16,8 @@ const ProfilePage: React.FC = () => {
     email: ''
   });
   const [message, setMessage] = useState('');
-  const [editing, setEditing] = useState(false);
+  const [error, setError] = useState(false);
+  const [editingField, setEditingField] = useState<keyof typeof profile | null>(null);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -28,34 +30,30 @@ const ProfilePage: React.FC = () => {
         });
         setProfile(response.data);
       } catch (error) {
-        console.error('Error fetching profile:', error);
+        console.error('Error al obtener el perfil:', error);
       }
     };
 
     fetchProfile();
   }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setProfile({
-      ...profile,
-      [e.target.name]: e.target.value
-    });
-  };
-
-  const handleUpdate = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleUpdate = async (updatedValue: string) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.put('/auth/profile', profile, {
+      const updatedProfile = { ...profile, [editingField!]: updatedValue };
+      await axios.put('/auth/profile', updatedProfile, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       });
-      setMessage('Profile updated successfully');
-      setEditing(false);
+      setProfile(updatedProfile);
+      setMessage('Perfil actualizado con éxito');
+      setError(false);
+      setEditingField(null);
     } catch (error) {
-      console.error('Error updating profile:', error);
-      setMessage('Error updating profile');
+      console.error('Error al actualizar el perfil:', error);
+      setMessage('Error al actualizar el perfil');
+      setError(true);
     }
   };
 
@@ -63,26 +61,51 @@ const ProfilePage: React.FC = () => {
     <Layout>
       <div className="profile-container">
         <h2>Perfil</h2>
-        {!editing ? (
-          <div className="profile-info">
-            <p><strong>Nombres:</strong> {profile.firstName}</p>
-            <p><strong>Apellidos:</strong> {profile.lastName}</p>
-            <p><strong>Teléfono:</strong> {profile.phone}</p>
-            <p><strong>Usuario:</strong> {profile.username}</p>
-            <p><strong>Correo Electrónico:</strong> {profile.email}</p>
-            <button className="btn" onClick={() => setEditing(true)}>Editar Información</button>
+        <div className="profile-info">
+          <div className="profile-row">
+            <div className="profile-field">
+              <label>Nombres:</label>
+              <input type="text" value={profile.firstName} readOnly />
+              <button onClick={() => setEditingField('firstName')}>Editar</button>
+            </div>
+            <div className="profile-field">
+              <label>Apellidos:</label>
+              <input type="text" value={profile.lastName} readOnly />
+              <button onClick={() => setEditingField('lastName')}>Editar</button>
+            </div>
           </div>
-        ) : (
-          <form onSubmit={handleUpdate} className="profile-form">
-            <input type="text" name="firstName" value={profile.firstName} onChange={handleChange} placeholder="Nombres" required />
-            <input type="text" name="lastName" value={profile.lastName} onChange={handleChange} placeholder="Apellidos" required />
-            <input type="text" name="phone" value={profile.phone} onChange={handleChange} placeholder="Teléfono" required />
-            <input type="text" name="username" value={profile.username} onChange={handleChange} placeholder="Usuario" required />
-            <input type="email" name="email" value={profile.email} onChange={handleChange} placeholder="Correo Electrónico" required />
-            <button type="submit" className="btn">Actualizar Perfil</button>
-          </form>
+          <div className="profile-row">
+            <div className="profile-field">
+              <label>Teléfono:</label>
+              <input type="text" value={profile.phone} readOnly />
+              <button onClick={() => setEditingField('phone')}>Editar</button>
+            </div>
+            <div className="profile-field">
+              <label>Usuario:</label>
+              <input type="text" value={profile.username} readOnly />
+              <button onClick={() => setEditingField('username')}>Editar</button>
+            </div>
+          </div>
+          <div className="profile-row">
+            <div className="profile-field">
+              <label>Correo Electrónico:</label>
+              <input type="text" value={profile.email} readOnly />
+              <button onClick={() => setEditingField('email')}>Editar</button>
+            </div>
+          </div>
+        </div>
+        {message && <p className={`message ${error ? 'error' : 'success'}`}>{message}</p>}
+        {editingField && (
+          <EditModal
+            field={editingField}
+            currentValue={profile[editingField]}
+            onSave={handleUpdate}
+            onCancel={() => setEditingField(null)}
+          />
         )}
-        {message && <p className="message">{message}</p>}
+        <div className="button-container">
+          <button className="save-btn">Guardar cambios</button>
+        </div>
       </div>
     </Layout>
   );

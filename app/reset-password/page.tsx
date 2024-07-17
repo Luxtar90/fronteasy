@@ -1,3 +1,4 @@
+// app/reset-password/page.tsx
 'use client';
 
 import React, { useState } from 'react';
@@ -9,6 +10,7 @@ import './resetPassword.css';
 const ResetPassword: React.FC = () => {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
+  const [error, setError] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -16,6 +18,7 @@ const ResetPassword: React.FC = () => {
     try {
       const response = await axios.post('/auth/reset-password-request', { email });
       setMessage(response.data.message);
+      setError(false);
       // Navegar a otra página si es necesario
       router.push('/login');
       setTimeout(() => {
@@ -23,9 +26,11 @@ const ResetPassword: React.FC = () => {
       }, 500);
     } catch (error) {
       if (isAxiosError(error)) {
-        setMessage((error.response?.data as { message: string })?.message || 'Error sending email');
+        setMessage((error.response?.data as { message: string })?.message || 'Error al enviar el correo');
+        setError(true);
       } else {
-        setMessage('Unknown error');
+        setMessage('Error desconocido');
+        setError(true);
       }
     }
   };
@@ -39,17 +44,22 @@ const ResetPassword: React.FC = () => {
           <p>Escribe tu correo registrado y te enviaremos un link de recuperación al mismo</p>
         </div>
         <form onSubmit={handleSubmit}>
-          <input
-            type="email"
-            placeholder="Correo Electrónico"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <button type="submit">Enviar</button>
+          <div className="form__group">
+            <input
+              type="email"
+              className="input"
+              placeholder="Correo Electrónico"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <button type="submit" className="send-button">Enviar<span></span></button>
         </form>
-        {message && <p className="message">{message}</p>}
-        <p className="login-link">¿Aún no tienes cuenta? <a onClick={() => { router.push('/register'); setTimeout(() => { window.location.reload(); }, 500); }}>Regístrate</a></p>
+        {message && <p className={`message ${error ? 'error' : 'success'}`}>{message}</p>}
+        <p className="login-link">
+          ¿Aún no tienes cuenta? <a onClick={() => { router.push('/register'); setTimeout(() => { window.location.reload(); }, 500); }}>Regístrate</a>
+        </p>
       </div>
     </div>
   );
