@@ -1,79 +1,89 @@
 'use client';
 
 import React, { useState } from 'react';
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useParams } from 'next/navigation';
+import Swal from 'sweetalert2';
 import './resetpassword.css';
 
 const ResetPasswordPage: React.FC = () => {
     const [newPassword, setNewPassword] = useState('');
     const [confirmNewPassword, setConfirmNewPassword] = useState('');
-    const [message, setMessage] = useState('');
-    const [success, setSuccess] = useState(false);
     const router = useRouter();
     const { token } = useParams();
-
-    console.log("Token:", token);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         if (newPassword !== confirmNewPassword) {
-            setMessage('Las contraseñas no coinciden');
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Las contraseñas no coinciden',
+            });
             return;
         }
 
         try {
             const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/reset-password`, { token, newPassword });
-            setMessage(response.data.message);
-            setSuccess(true);
+            Swal.fire({
+                icon: 'success',
+                title: 'Contraseña Actualizada',
+                text: 'Tu contraseña ha sido actualizada correctamente.',
+            });
 
             // Redirigir al login después de 3 segundos
             setTimeout(() => {
                 router.push('/login');
             }, 3000);
         } catch (error) {
-            console.error('Error al restablecer la contraseña:', error);
+            let message = 'Error al restablecer la contraseña';
             if (axios.isAxiosError(error) && error.response) {
                 if (error.response.status === 400) {
-                    setMessage('El token es inválido o ya ha sido usado');
+                    message = 'El token es inválido o ya ha sido usado';
                 } else if (error.response.status === 404) {
-                    setMessage('El token no se encontró');
-                } else {
-                    setMessage('Error al restablecer la contraseña');
+                    message = 'El token no se encontró';
                 }
-            } else {
-                setMessage('Error al restablecer la contraseña');
             }
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: message,
+            });
         }
     };
 
     return (
-        <div className="reset-password-container">
-            <div className={`reset-password-box ${success ? 'success' : ''}`}>
-                <h2>Restablecer Contraseña</h2>
+        <div className="reset-container">
+            <div className="reset-box">
+                <div className="reset-header">
+                    <img src="/logo.png" alt="Logo" className="logo" />
+                    <h2>Restablecer Contraseña</h2>
+                    <p>Ingresa tu nueva contraseña</p>
+                </div>
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
-                        <label>Nueva Contraseña</label>
                         <input
                             type="password"
                             value={newPassword}
                             onChange={(e) => setNewPassword(e.target.value)}
+                            className="input"
+                            placeholder="Nueva Contraseña"
                             required
                         />
                     </div>
                     <div className="form-group">
-                        <label>Confirmar Nueva Contraseña</label>
                         <input
                             type="password"
                             value={confirmNewPassword}
                             onChange={(e) => setConfirmNewPassword(e.target.value)}
+                            className="input"
+                            placeholder="Confirmar Nueva Contraseña"
                             required
                         />
                     </div>
                     <button type="submit" className="btn">Restablecer Contraseña</button>
-                    {message && <p className={`message ${success ? 'success' : 'error'}`}>{message}</p>}
                 </form>
             </div>
         </div>

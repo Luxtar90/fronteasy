@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import TaskForm from './TaskForm';
 import TaskList from './TaskList';
 import CalendarComponent from './CalendarComponent';
@@ -15,10 +15,20 @@ const TaskPage: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [showLoadingScreen, setShowLoadingScreen] = useState(true);
   const router = useRouter();
   const pathname = usePathname();
 
-  const fetchTasks = async () => {
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setShowLoadingScreen(false);
+    }, 1000);
+
+    return () => clearTimeout(timeout);
+  }, []);
+
+  const fetchTasks = useCallback(async () => {
     try {
       const token = localStorage.getItem('token');
       if (!token) {
@@ -35,48 +45,69 @@ const TaskPage: React.FC = () => {
     } catch (error: any) {
       console.error('Error fetching tasks:', error);
       if (error.response && error.response.status === 401) {
+        localStorage.removeItem('token'); // Remove the invalid token
         router.push('/login');
       }
+    } finally {
+      setIsLoading(false);
     }
-  };
+  }, [router]);
 
   useEffect(() => {
     fetchTasks();
-  }, [pathname]);
+  }, [fetchTasks, pathname]);
 
-  const handleTaskAdded = () => {
+  const handleTaskAdded = useCallback(() => {
     fetchTasks();
     setShowModal(false);
-  };
+  }, [fetchTasks]);
 
-  const handleTaskDeleted = (taskId: string) => {
-    setTasks(tasks.filter((task) => task._id !== taskId));
-  };
+  const handleTaskDeleted = useCallback((taskId: string) => {
+    setTasks((prevTasks) => prevTasks.filter((task) => task._id !== taskId));
+  }, []);
 
-  const handleTaskUpdated = (updatedTask: Task) => {
-    setTasks(tasks.map((task) => (task._id === updatedTask._id ? updatedTask : task)));
-  };
+  const handleTaskUpdated = useCallback((updatedTask: Task) => {
+    setTasks((prevTasks) => prevTasks.map((task) => (task._id === updatedTask._id ? updatedTask : task)));
+  }, []);
 
-  const toggleSidebar = () => {
-    setSidebarVisible(!sidebarVisible);
-  };
+  const toggleSidebar = useCallback(() => {
+    setSidebarVisible((prev) => !prev);
+  }, []);
 
-  const handleOverlayClick = () => {
+  const handleOverlayClick = useCallback(() => {
     setSidebarVisible(false);
-  };
+  }, []);
 
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     localStorage.removeItem('token');
     router.push('/login');
-  };
+  }, [router]);
 
-  const openModal = () => {
+  const openModal = useCallback(() => {
     setShowModal(true);
-  };
+  }, []);
 
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     setShowModal(false);
-  };
+  }, []);
+
+  if (showLoadingScreen) {
+    return (
+      <div className="loading-screen">
+        <div className="loader">
+          <div className="pencil">
+            <div className="pencil__ball-point"></div>
+            <div className="pencil__cap"></div>
+            <div className="pencil__cap-base"></div>
+            <div className="pencil__middle"></div>
+            <div className="pencil__eraser"></div>
+          </div>
+          <div className="line"></div>
+        </div>
+        <p>Cargando tareas...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="taskpage-container">

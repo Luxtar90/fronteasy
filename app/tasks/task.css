@@ -17,6 +17,101 @@ body {
   color: var(--text-color);
 }
 
+.loading-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f3f3f3;
+  flex-direction: column;
+}
+
+.loader {
+  display: flex;
+  align-items: center;
+}
+
+.pencil {
+  width: 50px;
+  height: 50px;
+  position: relative;
+  animation: pencil-write 3s infinite;
+}
+
+.pencil__ball-point {
+  background: #000;
+  width: 4px;
+  height: 4px;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.pencil__cap {
+  background: #ffeb3b;
+  width: 8px;
+  height: 10px;
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 2px 2px 0 0;
+}
+
+.pencil__cap-base {
+  background: #f3f3f3;
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 2px;
+}
+
+.pencil__middle {
+  background: #e0e0e0;
+  width: 10px;
+  height: 20px;
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.pencil__eraser {
+  background: #e57373;
+  width: 12px;
+  height: 8px;
+  position: absolute;
+  bottom: 44px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 2px;
+}
+
+.line {
+  width: 0;
+  height: 2px;
+  background: #000;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: line-write 3s infinite;
+}
+
+@keyframes pencil-write {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes line-write {
+  0%, 100% { width: 0; }
+  50% { width: 50px; }
+}
+
 .taskpage-container {
   display: flex;
   height: 100vh;
@@ -397,7 +492,6 @@ body {
 .floating-button:hover {
   background-color: #16a085;
 }
-
 
 .modal-content {
   padding: 20px;

@@ -1,10 +1,26 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from '../../src/axiosConfig';
 import { isAxiosError } from '../../src/utils/axiosUtils';
 import './login.css';
+
+// Componente de carga separado
+const LoadingScreen = React.memo(() => (
+  <div className="loading-screen">
+    <div className="loader">
+      <div className="pencil">
+        <div className="pencil__ball-point"></div>
+        <div className="pencil__cap"></div>
+        <div className="pencil__cap-base"></div>
+        <div className="pencil__middle"></div>
+        <div className="pencil__eraser"></div>
+      </div>
+      <div className="line"></div>
+    </div>
+  </div>
+));
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -13,6 +29,7 @@ const Login: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [emailSuggestions, setEmailSuggestions] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -20,11 +37,20 @@ const Login: React.FC = () => {
     setEmailSuggestions(storedEmails);
   }, []);
 
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-  };
+  useEffect(() => {
+    if (isLoggedIn) {
+      router.replace('/tasks');
+      setTimeout(() => {
+        window.location.reload();
+      }, 500);
+    }
+  }, [isLoggedIn, router]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleEmailChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  }, []);
+
+  const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     try {
@@ -38,10 +64,7 @@ const Login: React.FC = () => {
         localStorage.setItem('emails', JSON.stringify(storedEmails));
       }
 
-      router.replace('/tasks');
-      setTimeout(() => {
-        window.location.reload();
-      }, 500);
+      setIsLoggedIn(true);
     } catch (error) {
       setIsLoading(false);
       if (isAxiosError(error)) {
@@ -50,36 +73,28 @@ const Login: React.FC = () => {
         setMessage('Unknown error');
       }
     }
-  };
+  }, [email, password]);
 
-  const handleGoogleLogin = () => {
+  const handleGoogleLogin = useCallback(() => {
     window.location.href = `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/google`;
-  };
-  
-  const handleFacebookLogin = () => {
-    window.location.href = `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/facebook`;
-  };
-  
+  }, []);
 
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
+  const handleFacebookLogin = useCallback(() => {
+    window.location.href = `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/facebook`;
+  }, []);
+
+  const togglePasswordVisibility = useCallback(() => {
+    setShowPassword((prev) => !prev);
+  }, []);
+
+  const emailSuggestionsList = useMemo(() => (
+    emailSuggestions.map((suggestion, index) => (
+      <option key={index} value={suggestion} />
+    ))
+  ), [emailSuggestions]);
 
   if (isLoading) {
-    return (
-      <div className="loading-screen">
-        <div className="loader">
-          <div className="pencil">
-            <div className="pencil__ball-point"></div>
-            <div className="pencil__cap"></div>
-            <div className="pencil__cap-base"></div>
-            <div className="pencil__middle"></div>
-            <div className="pencil__eraser"></div>
-          </div>
-          <div className="line"></div>
-        </div>
-      </div>
-    );
+    return <LoadingScreen />;
   }
 
   return (
@@ -97,9 +112,6 @@ const Login: React.FC = () => {
             <button className="social-button google" onClick={handleGoogleLogin}>
               <img src="/google.png" alt="Google" />
             </button>
-            <button className="social-button apple">
-              <img src="/logotipo-de-apple.png" alt="Apple" />
-            </button>
           </div>
           <p className="separator">o por vía correo</p>
           <form onSubmit={handleSubmit}>
@@ -114,9 +126,7 @@ const Login: React.FC = () => {
               />
               <label className="label">Correo</label>
               <datalist id="email-suggestions">
-                {emailSuggestions.map((suggestion, index) => (
-                  <option key={index} value={suggestion} />
-                ))}
+                {emailSuggestionsList}
               </datalist>
             </div>
             <div className="input-field">

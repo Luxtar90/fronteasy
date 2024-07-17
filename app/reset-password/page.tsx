@@ -1,10 +1,10 @@
-// app/reset-password/page.tsx
 'use client';
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from '../../src/axiosConfig';
 import { isAxiosError } from '../../src/utils/axiosUtils';
+import Swal from 'sweetalert2';
 import './resetPassword.css';
 
 const ResetPassword: React.FC = () => {
@@ -19,11 +19,19 @@ const ResetPassword: React.FC = () => {
       const response = await axios.post('/auth/reset-password-request', { email });
       setMessage(response.data.message);
       setError(false);
-      // Navegar a otra página si es necesario
-      router.push('/login');
-      setTimeout(() => {
-        window.location.reload();
-      }, 500);
+      // Mostrar alerta de éxito
+      Swal.fire({
+        title: 'Correo enviado',
+        text: 'Se ha enviado un link de recuperación a tu correo electrónico.',
+        icon: 'success',
+        confirmButtonText: 'Aceptar'
+      }).then(() => {
+        // Navegar a otra página si es necesario
+        router.push('/login');
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
+      });
     } catch (error) {
       if (isAxiosError(error)) {
         setMessage((error.response?.data as { message: string })?.message || 'Error al enviar el correo');
