@@ -20,9 +20,11 @@
   align-items: center;
 }
 
-.fc .fc-toolbar-title {
+.fc-toolbar-title {
   font-size: 20px;
   font-weight: bold;
+  text-transform: capitalize; /* Añade esta línea */
+  white-space: nowrap; /* Evita que el texto se divida en dos líneas */
 }
 
 .fc .fc-button {
