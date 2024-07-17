@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from '../../src/axiosConfig';
 import './register.css';
@@ -19,6 +19,14 @@ const Register: React.FC = () => {
     const [isSuccess, setIsSuccess] = useState(false);
 
     const router = useRouter();
+
+    const handleGoogleLogin = useCallback(() => {
+        window.location.href = `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/google`;
+    }, []);
+
+    const handleFacebookLogin = useCallback(() => {
+        window.location.href = `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/facebook`;
+    }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -46,7 +54,7 @@ const Register: React.FC = () => {
         } catch (error) {
             setIsLoading(false);
             setIsSuccess(false);
-            setMessage('ERROR AL REGISTAR');
+            setMessage('ERROR AL REGISTRAR');
         }
     };
 
@@ -76,14 +84,11 @@ const Register: React.FC = () => {
                             <h2>Regístrate</h2>
                         </div>
                         <div className="social-login">
-                            <button className="social-button facebook">
+                            <button className="social-button facebook" onClick={handleFacebookLogin}>
                                 <img src="/facebook.png" alt="Facebook" />
                             </button>
-                            <button className="social-button google">
+                            <button className="social-button google" onClick={handleGoogleLogin}>
                                 <img src="/google.png" alt="Google" />
-                            </button>
-                            <button className="social-button apple">
-                                <img src="/logotipo-de-apple.png" alt="Apple" />
                             </button>
                         </div>
                         <p className="separator">o por vía correo</p>
