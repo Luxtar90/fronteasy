@@ -1,24 +1,50 @@
-/* tasklist.css */
+:root {
+  --primary-color: #3498db;
+  --secondary-color: #2c3e50;
+  --accent-color: #1abc9c;
+  --background-color: #f0f8ff;
+  --text-color: #333;
+  --border-radius: 8px;
+  --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  --transition-duration: 0.3s;
+  --font-family: 'Roboto', sans-serif;
+}
 
 .task-list {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  padding: 20px;
+  background: var(--background-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
 }
 
 .task-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
+  padding: 15px;
   background: #fff;
   border: 1px solid #ddd;
-  border-radius: 4px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  transition: background-color var(--transition-duration), box-shadow var(--transition-duration);
 }
 
 .task-item.completed {
-  background: #f0f8ff;
+  background: var(--accent-color);
+  color: #fff;
+}
+
+.task-item.completed .task-content h3,
+.task-item.completed .task-content p {
+  color: #fff;
+}
+
+.task-item:hover {
+  background: #f9f9f9;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .task-content {
@@ -27,10 +53,12 @@
 
 .task-content h3 {
   margin: 0;
+  font-size: 18px;
+  color: var(--text-color);
 }
 
 .task-content p {
-  margin: 0;
+  margin: 5px 0 0;
   color: #888;
 }
 
@@ -44,20 +72,24 @@
   border: none;
   cursor: pointer;
   font-size: 20px; /* Tamaño de fuente mayor para hacer los botones más grandes */
-  padding: 10px; /* Ajusta el padding si es necesario */
+  padding: 10px;
+  border-radius: var(--border-radius);
+  transition: background-color var(--transition-duration), color var(--transition-duration), transform var(--transition-duration);
 }
 
 .task-actions button:hover {
-  color: #1abc9c; /* Color al pasar el cursor por encima */
+  color: var(--accent-color);
+  background-color: rgba(26, 188, 156, 0.1);
+  transform: scale(1.1);
 }
 
 .loader {
   border: 4px solid #f3f3f3;
   border-radius: 50%;
-  border-top: 4px solid #3498db;
-  width: 16px;
-  height: 16px;
-  animation: spin 2s linear infinite;
+  border-top: 4px solid var(--primary-color);
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
 }
 
 @keyframes spin {

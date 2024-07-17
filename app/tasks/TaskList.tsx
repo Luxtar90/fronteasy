@@ -16,10 +16,10 @@ const TaskList: React.FC<{
   onTaskUpdated: (updatedTask: Task) => void;
 }> = ({ tasks, onTaskDeleted, onTaskUpdated }) => {
   const [editingTask, setEditingTask] = useState<Task | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loadingTaskId, setLoadingTaskId] = useState<string | null>(null);
 
   const handleToggleCompletion = async (taskId: string) => {
-    setLoading(true);
+    setLoadingTaskId(taskId);
     try {
       const token = localStorage.getItem('token');
       await axios.put(
@@ -35,10 +35,11 @@ const TaskList: React.FC<{
         task._id === taskId ? { ...task, completed: !task.completed } : task
       );
       onTaskUpdated(updatedTasks.find(task => task._id === taskId)!);
+      MySwal.fire('Completada', '¡Bien hecho! Has logrado completar la tarea. Se guardará en completadas por si la necesitas.', 'success');
     } catch (error) {
       console.error('Error toggling task completion:', error);
     } finally {
-      setLoading(false);
+      setLoadingTaskId(null);
     }
   };
 
@@ -58,7 +59,7 @@ const TaskList: React.FC<{
     });
 
     if (result.isConfirmed) {
-      setLoading(true);
+      setLoadingTaskId(taskId);
       try {
         const token = localStorage.getItem('token');
         await axios.delete(`/tasks/${taskId}`, {
@@ -72,7 +73,7 @@ const TaskList: React.FC<{
         console.error('Error deleting task:', error);
         MySwal.fire('Error', 'Hubo un problema al eliminar la tarea.', 'error');
       } finally {
-        setLoading(false);
+        setLoadingTaskId(null);
       }
     }
   };
@@ -84,6 +85,7 @@ const TaskList: React.FC<{
   const handleUpdateTask = (updatedTask: Task) => {
     onTaskUpdated(updatedTask);
     setEditingTask(null);
+    MySwal.fire('Actualizada', 'La tarea se ha actualizado correctamente.', 'success');
   };
 
   return (
@@ -97,14 +99,26 @@ const TaskList: React.FC<{
             <p>Fin: {task.end ? new Date(task.end).toLocaleString() : 'No definido'}</p>
           </div>
           <div className="task-actions">
-            <button onClick={() => handleToggleCompletion(task._id)} disabled={loading}>
-              {loading ? 'Cargando...' : <FontAwesomeIcon icon={faCheckCircle} />}
+            <button 
+              onClick={() => handleToggleCompletion(task._id)} 
+              disabled={loadingTaskId === task._id}
+              className={loadingTaskId === task._id ? 'loading' : ''}
+            >
+              {loadingTaskId === task._id ? <div className="spinner"></div> : <FontAwesomeIcon icon={faCheckCircle} />}
             </button>
-            <button onClick={() => handleEditTask(task)} disabled={loading}>
+            <button 
+              onClick={() => handleEditTask(task)} 
+              disabled={loadingTaskId === task._id}
+              className={loadingTaskId === task._id ? 'loading' : ''}
+            >
               <FontAwesomeIcon icon={faEdit} />
             </button>
-            <button onClick={() => handleDeleteTask(task._id)} disabled={loading}>
-              {loading ? 'Cargando...' : <FontAwesomeIcon icon={faTrashAlt} />}
+            <button 
+              onClick={() => handleDeleteTask(task._id)} 
+              disabled={loadingTaskId === task._id}
+              className={loadingTaskId === task._id ? 'loading' : ''}
+            >
+              {loadingTaskId === task._id ? <div className="spinner"></div> : <FontAwesomeIcon icon={faTrashAlt} />}
             </button>
           </div>
         </div>
