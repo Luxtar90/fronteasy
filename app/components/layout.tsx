@@ -19,20 +19,26 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     router.push('/login');
   };
 
+  const handleLogoClick = () => {
+    router.push('/tasks');
+  };
+
   return (
     <div className="layout-container">
       <div className="header-bar">
         <div className="menu-toggle" onClick={toggleSidebar}>
           <FontAwesomeIcon icon={faBars} size="2x" />
         </div>
-        <div className="logo">TaskEase</div>
+        <div className="logo" onClick={handleLogoClick} style={{ cursor: 'pointer' }}>
+          TaskEase
+        </div>
         <div className="logout" onClick={handleLogout}>
           <FontAwesomeIcon icon={faSignOutAlt} size="2x" />
         </div>
       </div>
       <div className={`overlay ${sidebarVisible ? 'visible' : ''}`} onClick={toggleSidebar}></div>
       <div className={`sidebar ${sidebarVisible ? 'visible' : ''}`}>
-        <div className="sidebar-logo">
+        <div className="sidebar-logo" onClick={handleLogoClick} style={{ cursor: 'pointer' }}>
           <FontAwesomeIcon icon={faTasks} /> TaskEase
         </div>
         <nav className="nav">
