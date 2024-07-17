@@ -50,6 +50,7 @@
     align-items: center;
     cursor: pointer;
     transition: color var(--transition-duration);
+    margin-right: 20px; /* Ajuste de margen para moverlo a la izquierda */
   }
   
   .logout:hover {

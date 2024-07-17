@@ -22,17 +22,17 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <div className="layout-container">
       <div className="header-bar">
-        <div className="logo">TaskEase</div>
         <div className="menu-toggle" onClick={toggleSidebar}>
           <FontAwesomeIcon icon={faBars} size="2x" />
         </div>
+        <div className="logo">TaskEase</div>
         <div className="logout" onClick={handleLogout}>
-          <FontAwesomeIcon icon={faSignOutAlt} /> Logout
+          <FontAwesomeIcon icon={faSignOutAlt} size="2x" />
         </div>
       </div>
       <div className={`overlay ${sidebarVisible ? 'visible' : ''}`} onClick={toggleSidebar}></div>
       <div className={`sidebar ${sidebarVisible ? 'visible' : ''}`}>
-        <div className="logo">
+        <div className="sidebar-logo">
           <FontAwesomeIcon icon={faTasks} /> TaskEase
         </div>
         <nav className="nav">

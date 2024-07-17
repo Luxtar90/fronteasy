@@ -46,7 +46,7 @@ const TaskPage: React.FC = () => {
 
   const handleTaskAdded = () => {
     fetchTasks();
-    setShowModal(false); 
+    setShowModal(false);
   };
 
   const handleTaskDeleted = (taskId: string) => {
@@ -80,18 +80,18 @@ const TaskPage: React.FC = () => {
 
   return (
     <div className="taskpage-container">
-      <div className="header-bar">
-        <div className="logo">TaskEase</div>
+      <header className="header-bar">
         <div className="menu-toggle" onClick={toggleSidebar}>
           <FontAwesomeIcon icon={faBars} size="2x" />
         </div>
+        <div className="logo">TaskEase</div>
         <div className="logout" onClick={handleLogout}>
-          <FontAwesomeIcon icon={faSignOutAlt} /> Logout
+          <FontAwesomeIcon icon={faSignOutAlt} size="2x" />
         </div>
-      </div>
+      </header>
       <div className={`overlay ${sidebarVisible ? 'visible' : ''}`} onClick={handleOverlayClick}></div>
-      <div className={`sidebar ${sidebarVisible ? 'visible' : ''}`}>
-        <div className="logo">
+      <aside className={`sidebar ${sidebarVisible ? 'visible' : ''}`}>
+        <div className="sidebar-logo">
           <FontAwesomeIcon icon={faTasks} /> TaskEase
         </div>
         <nav className="nav">
@@ -111,21 +111,23 @@ const TaskPage: React.FC = () => {
             <FontAwesomeIcon icon={faUser} /> Perfil
           </a>
         </nav>
-      </div>
-      <div className="content">
+      </aside>
+      <main className="content">
         <div className="task-list-container">
-          <h3>
-            <FontAwesomeIcon icon={faTasks} /> Tareas
-          </h3>
+          <div className="section-header">
+            <FontAwesomeIcon icon={faTasks} />
+            <h3>Tareas</h3>
+          </div>
           <TaskList tasks={tasks.filter(task => !task.completed)} onTaskDeleted={handleTaskDeleted} onTaskUpdated={handleTaskUpdated} />
         </div>
         <div className="calendar-container">
-          <h3>
-            <FontAwesomeIcon icon={faCalendarAlt} /> Calendario
-          </h3>
+          <div className="section-header">
+            <FontAwesomeIcon icon={faCalendarAlt} />
+            <h3>Calendario</h3>
+          </div>
           <CalendarComponent tasks={tasks} />
         </div>
-      </div>
+      </main>
       <button className="floating-button" onClick={openModal}>
         <FontAwesomeIcon icon={faPlus} />
       </button>
