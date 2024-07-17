@@ -97,9 +97,6 @@ const Login: React.FC = () => {
             <button className="social-button google" onClick={handleGoogleLogin}>
               <img src="/google.png" alt="Google" />
             </button>
-            <button className="social-button apple">
-              <img src="/logotipo-de-apple.png" alt="Apple" />
-            </button>
           </div>
           <p className="separator">o por vía correo</p>
           <form onSubmit={handleSubmit}>
