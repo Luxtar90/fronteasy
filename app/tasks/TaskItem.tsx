@@ -1,28 +1,58 @@
-'use client';
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from '../../src/axiosConfig';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrashAlt, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import { Task } from '../../src/types';
-import { toast } from 'react-toastify';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheckCircle, faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import EditTaskPopup from '../EditTaskPopup/EditTaskPopup';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
-import './task.css';
-import EditTaskPopup from '../EditTaskPopup/EditTaskPopup';
+import './taskitem.css';
 
 const MySwal = withReactContent(Swal);
 
-interface TaskItemProps {
+const TaskItem: React.FC<{
   task: Task;
   onTaskDeleted: (taskId: string) => void;
   onTaskUpdated: (updatedTask: Task) => void;
-}
+}> = ({ task, onTaskDeleted, onTaskUpdated }) => {
+  const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const [loading, setLoading] = useState(false);
 
-const TaskItem: React.FC<TaskItemProps> = ({ task, onTaskDeleted, onTaskUpdated }) => {
-  const [showPopup, setShowPopup] = useState(false);
+  useEffect(() => {
+    if (editingTask) {
+      document.body.classList.add('modal-open');
+    } else {
+      document.body.classList.remove('modal-open');
+    }
 
-  const handleDelete = async () => {
+    return () => {
+      document.body.classList.remove('modal-open');
+    };
+  }, [editingTask]);
+
+  const handleToggleCompletion = async () => {
+    setLoading(true);
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.put(
+        `/tasks/${task._id}/toggle-completion`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      onTaskUpdated(response.data);
+      MySwal.fire('Completada', '¡Bien hecho! Has logrado completar la tarea. Se guardará en completadas por si la necesitas.', 'success');
+    } catch (error) {
+      console.error('Error toggling task completion:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteTask = async () => {
     const result = await MySwal.fire({
       title: '¿Estás seguro?',
       text: 'Una vez eliminada, no se puede recuperar la tarea.',
@@ -38,6 +68,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onTaskDeleted, onTaskUpdated 
     });
 
     if (result.isConfirmed) {
+      setLoading(true);
       try {
         const token = localStorage.getItem('token');
         await axios.delete(`/tasks/${task._id}`, {
@@ -46,55 +77,71 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onTaskDeleted, onTaskUpdated 
           },
         });
         onTaskDeleted(task._id);
-        toast.success('Tarea eliminada correctamente');
+        MySwal.fire('Eliminada', 'La tarea ha sido eliminada.', 'success');
       } catch (error) {
         console.error('Error deleting task:', error);
-        toast.error('Error al eliminar la tarea');
+        MySwal.fire('Error', 'Hubo un problema al eliminar la tarea.', 'error');
+      } finally {
+        setLoading(false);
       }
     }
   };
 
-  const handleUpdate = (updatedTask: Task) => {
-    setShowPopup(false);
-    onTaskUpdated(updatedTask);
-    toast.success('Tarea actualizada correctamente');
+  const handleEditTask = () => {
+    setEditingTask(task);
   };
 
-  const handleToggleComplete = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      const response = await axios.patch(`/tasks/${task._id}/status`, { completed: !task.completed }, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      onTaskUpdated(response.data);
-      toast.success('Estado de la tarea actualizado');
-    } catch (error) {
-      console.error('Error updating task status:', error);
-      toast.error('Error al actualizar el estado de la tarea');
-    }
+  const handleUpdateTask = (updatedTask: Task) => {
+    onTaskUpdated(updatedTask);
+    setEditingTask(null);
+    MySwal.fire('Actualizada', 'La tarea se ha actualizado correctamente.', 'success');
   };
 
   return (
-    <div className={`task-item ${task.completed ? 'completed' : ''}`}>
-      <div className="task-content">
-        <h3>{task.title}</h3>
-        <p>{task.description}</p>
+    <>
+      <div className={`task-item ${task.completed ? 'completed' : ''}`}>
+        <div className="task-content">
+          <h3>{task.title}</h3>
+          <p>{task.description}</p>
+          <p>Inicio: {task.start ? new Date(task.start).toLocaleString() : 'No definido'}</p>
+          <p>Fin: {task.end ? new Date(task.end).toLocaleString() : 'No definido'}</p>
+        </div>
+        <div className="task-actions">
+          <button 
+            onClick={handleToggleCompletion} 
+            disabled={loading}
+            className={loading ? 'loading' : ''}
+          >
+            {loading ? <div className="spinner"></div> : <FontAwesomeIcon icon={faCheckCircle} />}
+          </button>
+          <button 
+            onClick={handleEditTask} 
+            disabled={loading}
+            className={loading ? 'loading' : ''}
+          >
+            <FontAwesomeIcon icon={faEdit} />
+          </button>
+          <button 
+            onClick={handleDeleteTask} 
+            disabled={loading}
+            className={loading ? 'loading' : ''}
+          >
+            {loading ? <div className="spinner"></div> : <FontAwesomeIcon icon={faTrashAlt} />}
+          </button>
+        </div>
       </div>
-      <div className="task-actions">
-        <button onClick={handleToggleComplete} className="complete-button">
-          <FontAwesomeIcon icon={faCheckCircle} />
-        </button>
-        <button className="edit-button" onClick={() => setShowPopup(true)}>
-          <FontAwesomeIcon icon={faEdit} />
-        </button>
-        <button className="delete-button" onClick={handleDelete}>
-          <FontAwesomeIcon icon={faTrashAlt} />
-        </button>
-      </div>
-      {showPopup && <EditTaskPopup task={task} onClose={() => setShowPopup(false)} onUpdate={handleUpdate} />}
-    </div>
+      {editingTask && (
+        <div className="modal" onClick={() => setEditingTask(null)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <EditTaskPopup
+              task={editingTask}
+              onClose={() => setEditingTask(null)}
+              onUpdate={handleUpdateTask}
+            />
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

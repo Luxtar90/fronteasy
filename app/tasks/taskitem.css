@@ -1,0 +1,138 @@
+:root {
+    --primary-color: #3498db;
+    --secondary-color: #2c3e50;
+    --accent-color: #1abc9c;
+    --background-color: #f0f8ff;
+    --text-color: #333;
+    --border-radius: 8px;
+    --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    --transition-duration: 0.3s;
+    --font-family: 'Roboto', sans-serif;
+  }
+  
+  body.modal-open * {
+    pointer-events: none;
+  }
+  
+  body.modal-open .modal,
+  body.modal-open .modal * {
+    pointer-events: all;
+  }
+  
+  .task-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    transition: background-color var(--transition-duration), box-shadow var(--transition-duration);
+  }
+  
+  .task-item.completed {
+    background: var(--accent-color);
+    color: #fff;
+  }
+  
+  .task-item.completed .task-content h3,
+  .task-item.completed .task-content p {
+    color: #fff;
+  }
+  
+  .task-item:hover {
+    background: #f9f9f9;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .task-content {
+    flex: 1;
+  }
+  
+  .task-content h3 {
+    margin: 0;
+    font-size: 18px;
+    color: var(--text-color);
+  }
+  
+  .task-content p {
+    margin: 5px 0 0;
+    color: #888;
+  }
+  
+  .task-actions {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .task-actions button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    padding: 10px;
+    border-radius: var(--border-radius);
+    transition: background-color var(--transition-duration), color var(--transition-duration), transform var(--transition-duration);
+  }
+  
+  .task-actions button:hover {
+    color: var(--accent-color);
+    background-color: rgba(26, 188, 156, 0.1);
+    transform: scale(1.1);
+  }
+  
+  .task-actions button.loading {
+    cursor: not-allowed;
+  }
+  
+  .spinner {
+    border: 4px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 4px solid var(--primary-color);
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  .modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    width: 500px;
+    max-width: 90%;
+    position: relative;
+  }
+  
+  .modal-content::before {
+    content: "";
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    bottom: -10px;
+    left: -10px;
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    z-index: -1;
+  }
+  
