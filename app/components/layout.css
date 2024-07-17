@@ -29,9 +29,9 @@
     align-items: center;
     background-color: var(--primary-color);
     color: white;
-    padding: 10px 20px;
+    padding: 10px 0.5px;
     position: fixed;
-    width: 100%;
+    width: 99.9%;
     top: 0;
     z-index: 1000;
   }

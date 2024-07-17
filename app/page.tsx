@@ -54,17 +54,9 @@ const HomePage: React.FC = () => {
           <span>✔️ Gestión de tareas recurrentes</span>
         </div>
         <button className="cta-button" onClick={() => goToPage('/register')}>Empezar ahora</button>
-        <p className="cta-note">Gratis para siempre. No se necesita tarjeta de crédito.</p>
       </div>
       <footer className="footer">
-        <p>Con la confianza de +225.000 clientes de todo el mundo</p>
         <div className="logos">
-          <img src="/path-to-logo1.png" alt="Logo 1" />
-          <img src="/path-to-logo2.png" alt="Logo 2" />
-          <img src="/path-to-logo3.png" alt="Logo 3" />
-          <img src="/path-to-logo4.png" alt="Logo 4" />
-          <img src="/path-to-logo5.png" alt="Logo 5" />
-          <img src="/path-to-logo6.png" alt="Logo 6" />
         </div>
       </footer>
     </div>

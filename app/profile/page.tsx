@@ -62,30 +62,36 @@ const ProfilePage: React.FC = () => {
       <div className="profile-container">
         <h2>Perfil</h2>
         <div className="profile-info">
-          <div className="profile-field">
-            <span>Nombres:</span>
-            <span>{profile.firstName}</span>
-            <button onClick={() => setEditingField('firstName')}>Edita</button>
+          <div className="profile-row">
+            <div className="profile-field">
+              <label>Nombres:</label>
+              <input type="text" value={profile.firstName} readOnly />
+              <button onClick={() => setEditingField('firstName')}>Editar</button>
+            </div>
+            <div className="profile-field">
+              <label>Apellidos:</label>
+              <input type="text" value={profile.lastName} readOnly />
+              <button onClick={() => setEditingField('lastName')}>Editar</button>
+            </div>
           </div>
-          <div className="profile-field">
-            <span>Apellidos:</span>
-            <span>{profile.lastName}</span>
-            <button onClick={() => setEditingField('lastName')}>Edita</button>
+          <div className="profile-row">
+            <div className="profile-field">
+              <label>Teléfono:</label>
+              <input type="text" value={profile.phone} readOnly />
+              <button onClick={() => setEditingField('phone')}>Editar</button>
+            </div>
+            <div className="profile-field">
+              <label>Usuario:</label>
+              <input type="text" value={profile.username} readOnly />
+              <button onClick={() => setEditingField('username')}>Editar</button>
+            </div>
           </div>
-          <div className="profile-field">
-            <span>Teléfono:</span>
-            <span>{profile.phone}</span>
-            <button onClick={() => setEditingField('phone')}>Edita</button>
-          </div>
-          <div className="profile-field">
-            <span>Usuario:</span>
-            <span>{profile.username}</span>
-            <button onClick={() => setEditingField('username')}>Edita</button>
-          </div>
-          <div className="profile-field">
-            <span>Correo Electrónico:</span>
-            <span>{profile.email}</span>
-            <button onClick={() => setEditingField('email')}>Edita</button>
+          <div className="profile-row">
+            <div className="profile-field">
+              <label>Correo Electrónico:</label>
+              <input type="text" value={profile.email} readOnly />
+              <button onClick={() => setEditingField('email')}>Editar</button>
+            </div>
           </div>
         </div>
         {message && <p className={`message ${error ? 'error' : 'success'}`}>{message}</p>}
@@ -97,6 +103,9 @@ const ProfilePage: React.FC = () => {
             onCancel={() => setEditingField(null)}
           />
         )}
+        <div className="button-container">
+          <button className="save-btn">Guardar cambios</button>
+        </div>
       </div>
     </Layout>
   );
