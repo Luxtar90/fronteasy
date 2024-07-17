@@ -1,26 +1,10 @@
 'use client';
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from '../../src/axiosConfig';
 import { isAxiosError } from '../../src/utils/axiosUtils';
 import './login.css';
-
-// Componente de carga separado
-const LoadingScreen = React.memo(() => (
-  <div className="loading-screen">
-    <div className="loader">
-      <div className="pencil">
-        <div className="pencil__ball-point"></div>
-        <div className="pencil__cap"></div>
-        <div className="pencil__cap-base"></div>
-        <div className="pencil__middle"></div>
-        <div className="pencil__eraser"></div>
-      </div>
-      <div className="line"></div>
-    </div>
-  </div>
-));
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -36,11 +20,11 @@ const Login: React.FC = () => {
     setEmailSuggestions(storedEmails);
   }, []);
 
-  const handleEmailChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
-  }, []);
+  };
 
-  const handleSubmit = useCallback(async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     try {
@@ -66,28 +50,36 @@ const Login: React.FC = () => {
         setMessage('Unknown error');
       }
     }
-  }, [email, password, router]);
+  };
 
-  const handleGoogleLogin = useCallback(() => {
+  const handleGoogleLogin = () => {
     window.location.href = `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/google`;
-  }, []);
-
-  const handleFacebookLogin = useCallback(() => {
+  };
+  
+  const handleFacebookLogin = () => {
     window.location.href = `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/facebook`;
-  }, []);
+  };
+  
 
-  const togglePasswordVisibility = useCallback(() => {
-    setShowPassword((prev) => !prev);
-  }, []);
-
-  const emailSuggestionsList = useMemo(() => (
-    emailSuggestions.map((suggestion, index) => (
-      <option key={index} value={suggestion} />
-    ))
-  ), [emailSuggestions]);
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   if (isLoading) {
-    return <LoadingScreen />;
+    return (
+      <div className="loading-screen">
+        <div className="loader">
+          <div className="pencil">
+            <div className="pencil__ball-point"></div>
+            <div className="pencil__cap"></div>
+            <div className="pencil__cap-base"></div>
+            <div className="pencil__middle"></div>
+            <div className="pencil__eraser"></div>
+          </div>
+          <div className="line"></div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -122,7 +114,9 @@ const Login: React.FC = () => {
               />
               <label className="label">Correo</label>
               <datalist id="email-suggestions">
-                {emailSuggestionsList}
+                {emailSuggestions.map((suggestion, index) => (
+                  <option key={index} value={suggestion} />
+                ))}
               </datalist>
             </div>
             <div className="input-field">
