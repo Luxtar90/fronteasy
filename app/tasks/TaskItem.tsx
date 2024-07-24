@@ -105,6 +105,7 @@ const TaskItem: React.FC<{
           <p>{task.description}</p>
           <p>Inicio: {task.start ? new Date(task.start).toLocaleString() : 'No definido'}</p>
           <p>Fin: {task.end ? new Date(task.end).toLocaleString() : 'No definido'}</p>
+          <p>Porcentaje de completitud: {task.completionPercentage || 0}%</p> {/* Añadir completionPercentage */}
         </div>
         <div className="task-actions">
           <button 

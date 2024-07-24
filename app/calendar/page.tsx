@@ -1,4 +1,3 @@
-// app/calendar/page.tsx
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -23,11 +22,12 @@ const CalendarPage: React.FC = () => {
       });
       const events = response.data.map((task: any) => ({
         id: task._id,
-        title: task.title,
+        title: `${task.title} (${task.completionPercentage || 0}%)`,
         start: task.start,
         end: task.end,
         description: task.description,
         completed: task.completed,
+        color: task.color, // Añadir color aquí
       }));
       setTasks(events);
     } catch (error) {

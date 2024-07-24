@@ -64,11 +64,13 @@ const TaskPage: React.FC = () => {
 
   const handleTaskDeleted = useCallback((taskId: string) => {
     setTasks((prevTasks) => prevTasks.filter((task) => task._id !== taskId));
-  }, []);
+    fetchTasks(); // Fetch tasks to update calendar after deletion
+  }, [fetchTasks]);
 
   const handleTaskUpdated = useCallback((updatedTask: Task) => {
     setTasks((prevTasks) => prevTasks.map((task) => (task._id === updatedTask._id ? updatedTask : task)));
-  }, []);
+    fetchTasks(); // Fetch tasks to update calendar after update
+  }, [fetchTasks]);
 
   const toggleSidebar = useCallback(() => {
     setSidebarVisible((prev) => !prev);
@@ -156,7 +158,14 @@ const TaskPage: React.FC = () => {
             <FontAwesomeIcon icon={faCalendarAlt} />
             <h3>Calendario</h3>
           </div>
-          <CalendarComponent tasks={tasks} />
+          <CalendarComponent tasks={tasks.filter(task => !task.completed).map(task => ({
+            id: task._id,
+            title: `${task.title} (${task.completionPercentage || 0}%)`,
+            start: task.start,
+            end: task.end,
+            description: task.description,
+            color: task.color
+          }))} />
         </div>
       </main>
       <button className="floating-button" onClick={openModal}>

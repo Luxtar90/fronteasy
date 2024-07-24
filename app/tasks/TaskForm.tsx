@@ -13,6 +13,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ onTaskAdded }) => {
   const [start, setStart] = useState('');
   const [end, setEnd] = useState('');
   const [color, setColor] = useState('#1abc9c'); // Añadir estado para color
+  const [completionPercentage, setCompletionPercentage] = useState(0); // Añadir estado para completionPercentage
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -20,7 +21,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ onTaskAdded }) => {
     setIsLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.post('/tasks', { title, description, start, end, color }, { // Enviar color al backend
+      const response = await axios.post('/tasks', { title, description, start, end, color, completionPercentage }, { // Enviar color y completionPercentage al backend
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -31,6 +32,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ onTaskAdded }) => {
       setStart('');
       setEnd('');
       setColor('#1abc9c'); // Restablecer color
+      setCompletionPercentage(0); // Restablecer completionPercentage
     } catch (error) {
       console.error('Error adding task:', error);
     } finally {
@@ -82,6 +84,17 @@ const TaskForm: React.FC<TaskFormProps> = ({ onTaskAdded }) => {
           type="color"
           value={color}
           onChange={(e) => setColor(e.target.value)}
+          required
+        />
+      </div>
+      <div className="form-group">
+        <label>Porcentaje de completitud</label>
+        <input
+          type="number"
+          value={completionPercentage}
+          onChange={(e) => setCompletionPercentage(Number(e.target.value))}
+          min="0"
+          max="100"
           required
         />
       </div>
