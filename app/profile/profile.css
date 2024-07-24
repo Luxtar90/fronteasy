@@ -33,11 +33,12 @@
 
 .profile-row {
   display: flex;
+  flex-wrap: wrap;
   gap: 20px;
 }
 
 .profile-field {
-  flex: 1;
+  flex: 1 1 45%; /* Permite flexibilidad y ajustes en pantallas pequeñas */
   display: flex;
   flex-direction: column;
   gap: 5px;
@@ -54,6 +55,11 @@
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   padding: 10px;
+  transition: border-color 0.3s ease-in-out;
+}
+
+.profile-field input:focus {
+  border-color: #67aefa;
 }
 
 .profile-field button {
@@ -110,4 +116,19 @@
 .save-btn:hover {
   box-shadow: 0 0 10px 2px #67aefa;
   background: #5a9de0;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .profile-container {
+    padding: 20px;
+  }
+
+  .profile-row {
+    flex-direction: column;
+  }
+
+  .profile-field {
+    flex: 1 1 100%;
+  }
 }
