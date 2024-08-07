@@ -55,11 +55,10 @@ const Login: React.FC = () => {
   const handleGoogleLogin = () => {
     window.location.href = `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/google`;
   };
-  
+
   const handleFacebookLogin = () => {
     window.location.href = `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/facebook`;
   };
-  
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -146,9 +145,11 @@ const Login: React.FC = () => {
                 ¿Olvidaste tu contraseña?
               </button>
             </div>
-            <button type="submit" className="submit-btn">
-              Iniciar Sesión
-            </button>
+            <div className="button-container">
+              <button type="submit" className="submit-btn">
+                Iniciar Sesión
+              </button>
+            </div>
           </form>
           {message && <p className="error-message">{message}</p>}
           <p className="register-link">¿Aún no tienes cuenta? 

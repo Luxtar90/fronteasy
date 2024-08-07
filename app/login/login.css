@@ -215,6 +215,11 @@ input {
   cursor: pointer;
 }
 
+.button-container {
+  display: flex;
+  justify-content: center;
+}
+
 .submit-btn {
   margin-top: 15px;
   height: 55px;
